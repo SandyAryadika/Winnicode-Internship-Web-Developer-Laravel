@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Select;
+use Filament\Facades\Filament;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
@@ -35,7 +36,8 @@ class CategoryResource extends Resource
                     ->required()
                     ->directory('category-icons')
                     ->disk('public')
-                    ->visibility('public'),
+                    ->visibility('public')
+                    ->columnSpan('full'),
 
                 Select::make('name')
                     ->label('Nama Kategori')
@@ -49,7 +51,8 @@ class CategoryResource extends Resource
                         'Teknologi' => 'Teknologi',
                         'Pendidikan' => 'Pendidikan',
                     ])
-                    ->searchable(),
+                    ->searchable()
+                    ->columnSpan('full'),
 
                 Forms\Components\TextInput::make('slug')
                     ->label('Slug')
@@ -61,7 +64,8 @@ class CategoryResource extends Resource
                 Forms\Components\Textarea::make('description')
                     ->label('Deskripsi')
                     ->nullable()
-                    ->required(),
+                    ->required()
+                    ->columnSpan('full'),
             ]);
     }
 
@@ -91,9 +95,13 @@ class CategoryResource extends Resource
                     ->label('Hapus'),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make()
+                    ->visible(
+                        fn() =>
+                        Filament::auth()->user()->hasRole('admin') ||
+                            Filament::auth()->user()->hasRole('editor')
+                    )
+
             ]);
     }
 

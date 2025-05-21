@@ -20,4 +20,8 @@ class Author extends Model
     {
         return $this->articles()->count();
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -44,10 +44,10 @@ class UserResource extends Resource
                 ->dehydrated(fn($state) => filled($state))
                 ->required(fn(string $context) => $context === 'create'),
 
-            Forms\Components\Select::make('roles') // pastikan ini sesuai dengan relasi di User model (spatie)
+            Forms\Components\Select::make('roles')
                 ->label('Role')
                 ->multiple()
-                ->relationship('roles', 'name') // ini penting untuk relasi many-to-many dengan Spatie Role
+                ->relationship('roles', 'name')
                 ->preload()
                 ->required(),
 
@@ -66,7 +66,7 @@ class UserResource extends Resource
                     ->badge()
                     ->formatStateUsing(function ($state) {
                         if (is_array($state)) {
-                            return implode(', ', $state); // gabungkan semua role jadi string
+                            return implode(', ', $state);
                         }
                         return $state;
                     })

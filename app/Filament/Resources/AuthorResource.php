@@ -38,6 +38,13 @@ class AuthorResource extends Resource
                     ->default(fn() => auth()->id())
                     ->required(),
 
+                FileUpload::make('photo')
+                    ->label('Foto')
+                    ->image()
+                    ->disk('public')
+                    ->required()
+                    ->columnSpan('full'),
+
                 TextInput::make('name')
                     ->label('Nama Author')
                     ->required()
@@ -52,13 +59,6 @@ class AuthorResource extends Resource
                     ->columnSpan('full'),
 
                 Textarea::make('bio')
-                    ->columnSpan('full'),
-
-                FileUpload::make('photo')
-                    ->label('Foto')
-                    ->image()
-                    ->disk('public')
-                    ->required()
                     ->columnSpan('full'),
 
                 Toggle::make('is_active')
@@ -80,7 +80,7 @@ class AuthorResource extends Resource
             ->columns([
                 TextColumn::make('name')->label('Nama')->searchable(),
                 TextColumn::make('email')->label('Email')->searchable(),
-                TextColumn::make('bio')->label('Bio')->limit(20)->searchable(),
+                TextColumn::make('bio')->label('Bio')->limit(20)->searchable()->tooltip(fn($record) => $record->bio),
                 ImageColumn::make('photo')
                     ->label('Foto')
                     ->disk('public')
@@ -141,7 +141,9 @@ class AuthorResource extends Resource
         }
 
         // Admin lihat semua
-        return $query;
+        return $query
+            ->orderByRaw('user_id = ? DESC', [auth()->id()])
+            ->orderByDesc('created_at');
     }
 
     public static function mutateFormDataBeforeCreate(array $data): array

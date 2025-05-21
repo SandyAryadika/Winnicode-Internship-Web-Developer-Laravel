@@ -18,6 +18,7 @@ class Article extends Model
         'category_id',
         'author_id',
         'published_at',
+        'is_hot',
     ];
 
     public function category()
