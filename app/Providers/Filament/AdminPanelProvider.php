@@ -2,7 +2,6 @@
 
 namespace App\Providers\Filament;
 
-
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -13,6 +12,8 @@ use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
 use App\Filament\Resources\FilamentResource\Widgets\ArticleStats;
+use App\Filament\Resources\AdminResource\Widgets\ArticlesChart;
+use App\Filament\Resources\AdminResource\Widgets\ArticlesDailyChart;
 use App\Filament\Resources\CategoryResource;
 use App\Filament\Widgets\TopAuthorsWidget;
 use App\Filament\Resources\FilamentResource\Widgets\TopAuthorWidget;
@@ -22,6 +23,8 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Pages\Dashboard as BaseDashboard;
+use Filament\Widgets\BarChartWidget;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -45,6 +48,8 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
                 ArticleStats::class,
+                ArticlesChart::class,
+                TopAuthorsWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -60,6 +65,8 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->brandName('WinniCode');
+            ->brandName('WinniCode')
+            ->brandLogo(asset('images/banner-logo.png'))
+            ->brandLogoHeight('3rem');
     }
 }

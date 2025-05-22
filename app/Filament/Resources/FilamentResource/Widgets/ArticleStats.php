@@ -20,7 +20,6 @@ class ArticleStats extends StatsOverviewWidget
 
             Card::make('Total kategori yang ada', $totalCategories),
 
-            // Card::make('Total Penulis', Author::where('is_active', true)->count())
             Card::make('Total penulis terdaftar', Author::count()),
         ];
     }

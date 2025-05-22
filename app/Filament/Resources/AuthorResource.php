@@ -76,7 +76,7 @@ class AuthorResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->description('⚠️ Informasi ini bersifat rahasia dan tidak untuk disebarluaskan.')
+            ->description('⚠️ Informasi ini bersifat rahasia dan tidak untuk disebarluaskan | ℹ️ Sebelum mendaftar penulis baru (New author), pastikan email yang digunakan sama dengan di panel pengguna')
             ->columns([
                 TextColumn::make('name')->label('Nama')->searchable(),
                 TextColumn::make('email')->label('Email')->searchable(),
@@ -140,7 +140,6 @@ class AuthorResource extends Resource
             return $query->where('user_id', auth()->id());
         }
 
-        // Admin lihat semua
         return $query
             ->orderByRaw('user_id = ? DESC', [auth()->id()])
             ->orderByDesc('created_at');
@@ -148,7 +147,7 @@ class AuthorResource extends Resource
 
     public static function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['user_id'] = auth()->id(); // ambil id user yang login
+        $data['user_id'] = auth()->id();
         return $data;
     }
 

@@ -73,12 +73,10 @@ class ArticleResource extends Resource
                 ->options(function () {
                     $user = Filament::auth()->user();
 
-                    // Jika admin, bisa pilih semua
                     if ($user->hasRole('admin')) {
                         return Author::all()->pluck('name', 'id');
                     }
 
-                    // Jika editor, hanya penulis dirinya sendiri
                     return Author::where('user_id', $user->id)->pluck('name', 'id');
                 })
                 ->required()
@@ -144,7 +142,8 @@ class ArticleResource extends Resource
                 ->trueIcon('heroicon-s-fire')
                 ->falseIcon('heroicon-s-x-circle')
                 ->trueColor('danger')
-                ->falseColor('gray'),
+                ->falseColor('gray')
+                ->verticallyAlignStart(),
 
             TextColumn::make('created_at')
                 ->label('Tanggal Dibuat')
@@ -160,18 +159,18 @@ class ArticleResource extends Resource
                     ->visible(
                         fn($record) =>
                         Filament::auth()->user()->hasRole('admin') ||
-                            Filament::auth()->user()->id === $record->author->user_id
+                            Filament::auth()->user()->id === optional($record->author)->user_id
                     ),
 
                 Tables\Actions\DeleteAction::make()
                     ->visible(
                         fn($record) =>
                         Filament::auth()->user()->hasRole('admin') ||
-                            Filament::auth()->user()->id === $record->author->user_id
+                            Filament::auth()->user()->id === optional($record->author)->user_id
                     ),
             ])
             ->filters([
-                // Tambahkan filter jika diperlukan
+                //
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make()
@@ -197,17 +196,16 @@ class ArticleResource extends Resource
     {
         $user = Filament::auth()->user();
 
-        // Jika editor, hanya tampilkan artikelnya sendiri
         if ($user->hasRole('editor')) {
             return parent::getEloquentQuery()
                 ->whereHas('author', fn($q) => $q->where('user_id', $user->id));
         }
 
-        // Untuk admin dan role lain, tampilkan semua tapi miliknya duluan
         return parent::getEloquentQuery()
             ->leftJoin('authors', 'articles.author_id', '=', 'authors.id')
             ->orderByRaw('CASE WHEN authors.user_id = ? THEN 0 ELSE 1 END', [$user->id])
-            ->orderBy('created_at', 'desc')
-            ->select('articles.*');
+            ->orderBy('articles.created_at', 'desc')
+            ->select('articles.*')
+            ->where('articles.deleted_at', null);
     }
 }

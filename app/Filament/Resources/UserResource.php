@@ -30,26 +30,30 @@ class UserResource extends Resource
         return $form->schema([
             Forms\Components\TextInput::make('name')
                 ->required()
-                ->maxLength(255),
+                ->maxLength(255)
+                ->columnSpan('full'),
 
             Forms\Components\TextInput::make('email')
                 ->email()
                 ->required()
-                ->maxLength(255),
+                ->maxLength(255)
+                ->columnSpan('full'),
 
             Forms\Components\TextInput::make('password')
                 ->password()
                 ->maxLength(255)
                 ->dehydrateStateUsing(fn($state) => filled($state) ? Hash::make($state) : null)
                 ->dehydrated(fn($state) => filled($state))
-                ->required(fn(string $context) => $context === 'create'),
+                ->required(fn(string $context) => $context === 'create')
+                ->columnSpan('full'),
 
             Forms\Components\Select::make('roles')
                 ->label('Role')
                 ->multiple()
                 ->relationship('roles', 'name')
                 ->preload()
-                ->required(),
+                ->required()
+                ->columnSpan('full'),
 
         ]);
     }

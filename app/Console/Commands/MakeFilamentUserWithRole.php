@@ -38,16 +38,13 @@ class MakeFilamentUserWithRole extends Command
             return 1;
         }
 
-        // Create the role if it doesn't exist
         Role::firstOrCreate(['name' => $role]);
 
-        // Cek apakah user sudah ada
         if (User::where('email', $email)->exists()) {
             $this->error('User dengan email ini sudah ada.');
             return 1;
         }
 
-        // Create user
         $user = User::create([
             'name' => $name,
             'email' => $email,
