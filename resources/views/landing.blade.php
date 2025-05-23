@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
+@section('title', 'Winnicode')
+
 @section('content')
-
-    @include('partials.hero')
-
-    @include('partials.hot-news')
-
-    @include('partials.news-slider')
-    
-    @include('partials.featured-contributors')
-
-    @include('partials.news-categories')
-
+    @include('partials.header')
+    @include('partials.navbar')
+    @include('partials.berita-terkini')
+    @include('partials.berita-utama')
+    @include('partials.sorotan')
+    @include('partials.pilihan-penulis')
+    @include('partials.kontributor')
+    @include('partials.newsletter')
+    @include('partials.footer')
 @endsection
