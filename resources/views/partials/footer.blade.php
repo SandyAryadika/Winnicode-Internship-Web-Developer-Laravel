@@ -46,6 +46,6 @@
     </div>
 
     <!-- Copyright -->
-    <div class="text-center text-sm text-gray-500 mt-12">
+    <div class="text-center text-sm text-gray-500 mt-10 mb-6">
         Copyright &copy; 2025 PT. WINNICODE GARUDA TEKNOLOGI.
     </div>

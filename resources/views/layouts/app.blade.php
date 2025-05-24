@@ -38,7 +38,7 @@
 
     <!-- JS Global -->
     <script>
-        // untuk hari
+        // date-today
         document.addEventListener("DOMContentLoaded", () => {
             const dateSpan = document.getElementById("date-today");
 
@@ -64,7 +64,6 @@
             updateDateTime();
             setInterval(updateDateTime, 1000);
 
-            // Untuk navigation scroll loop
             const scrollBox = document.getElementById("category-scroll");
             if (scrollBox) {
                 scrollBox.innerHTML += scrollBox.innerHTML;

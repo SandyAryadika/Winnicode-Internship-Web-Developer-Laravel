@@ -19,6 +19,9 @@ class Article extends Model
         'author_id',
         'published_at',
         'is_hot',
+        'is_headline',
+        'is_featured',
+        'is_editor_choice',
     ];
 
     public function category()
@@ -28,6 +31,6 @@ class Article extends Model
 
     public function author()
     {
-        return $this->belongsTo(Author::class);
+        return $this->belongsTo(Author::class, 'user_id');
     }
 }

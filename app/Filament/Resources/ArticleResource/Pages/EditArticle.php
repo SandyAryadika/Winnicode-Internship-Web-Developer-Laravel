@@ -34,4 +34,14 @@ class EditArticle extends EditRecord
 
         $this->authorizeAccess();
     }
+
+    /**
+     * Override this method to avoid 'ambiguous column id' issue
+     */
+    public static function resolveRecordRouteBinding($key): \Illuminate\Database\Eloquent\Model
+    {
+        return ArticleResource::getEloquentQuery()
+            ->where('articles.id', $key)
+            ->firstOrFail();
+    }
 }

@@ -5,7 +5,7 @@ namespace App\Filament\Resources\ArticleResource\Pages;
 use App\Filament\Resources\ArticleResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Forms\Components\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListArticles extends ListRecords
 {
@@ -17,10 +17,14 @@ class ListArticles extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
     public static function getEloquentQuery(): Builder
     {
-        if (auth()->user()->role === 'writer') {
-            return parent::getEloquentQuery()->where('user_id', auth()->id());
+        $user = auth()->user();
+
+        if ($user->hasRole('writer')) {
+            return parent::getEloquentQuery()
+                ->whereHas('author', fn($q) => $q->where('user_id', $user->id));
         }
 
         return parent::getEloquentQuery();

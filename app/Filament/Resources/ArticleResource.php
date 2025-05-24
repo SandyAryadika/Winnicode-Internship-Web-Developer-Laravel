@@ -99,6 +99,24 @@ class ArticleResource extends Resource
                 ->helperText('Aktifkan jika artikel ini merupakan berita yang sedang tren atau penting.')
                 ->default(false)
                 ->columnSpan('full'),
+
+            Toggle::make('is_headline')
+                ->label('Berita Utama')
+                ->helperText('Tandai artikel ini sebagai berita utama.')
+                ->default(false)
+                ->columnSpan('full'),
+
+            Toggle::make('is_featured')
+                ->label('Sorotan Pilihan')
+                ->helperText('Tampilkan artikel ini di bagian sorotan pilihan.')
+                ->default(false)
+                ->columnSpan('full'),
+
+            Toggle::make('is_editor_choice')
+                ->label('Pilihan Editor')
+                ->helperText('Artikel ini dipilih langsung oleh editor.')
+                ->default(false)
+                ->columnSpan('full'),
         ]);
     }
 
@@ -142,6 +160,30 @@ class ArticleResource extends Resource
                 ->trueIcon('heroicon-s-fire')
                 ->falseIcon('heroicon-s-x-circle')
                 ->trueColor('danger')
+                ->falseColor('gray')
+                ->verticallyAlignStart(),
+
+            BooleanColumn::make('is_headline')
+                ->label('Berita Utama')
+                ->trueIcon('heroicon-s-star')
+                ->falseIcon('heroicon-s-x-circle')
+                ->trueColor('primary')
+                ->falseColor('gray')
+                ->verticallyAlignStart(),
+
+            BooleanColumn::make('is_featured')
+                ->label('Sorotan Pilihan')
+                ->trueIcon('heroicon-s-light-bulb')
+                ->falseIcon('heroicon-s-x-circle')
+                ->trueColor('warning')
+                ->falseColor('gray')
+                ->verticallyAlignStart(),
+
+            BooleanColumn::make('is_editor_choice')
+                ->label('Pilihan Editor')
+                ->trueIcon('heroicon-s-check-badge')
+                ->falseIcon('heroicon-s-x-circle')
+                ->trueColor('success')
                 ->falseColor('gray')
                 ->verticallyAlignStart(),
 
@@ -205,7 +247,18 @@ class ArticleResource extends Resource
             ->leftJoin('authors', 'articles.author_id', '=', 'authors.id')
             ->orderByRaw('CASE WHEN authors.user_id = ? THEN 0 ELSE 1 END', [$user->id])
             ->orderBy('articles.created_at', 'desc')
-            ->select('articles.*')
-            ->where('articles.deleted_at', null);
+            ->select('articles.*', 'articles.id as id');
+    }
+
+    public static function resolveRecordRouteBinding($key): \Illuminate\Database\Eloquent\Model
+    {
+        return static::getEloquentQuery()
+            ->where('articles.id', $key)
+            ->firstOrFail();
+    }
+
+    public static function getRecordQueryKeyName(): ?string
+    {
+        return 'id';
     }
 }
