@@ -87,7 +87,6 @@ class ArticleResource extends Resource
                     return Filament::auth()->user()->hasRole('editor');
                 }),
 
-
             DatePicker::make('published_at')
                 ->label('Tanggal Publikasi')
                 ->required()
@@ -149,11 +148,17 @@ class ArticleResource extends Resource
                 }),
 
             TextColumn::make('author.name')
-                ->label('Penulis'),
+                ->label('Penulis')
+                ->alignCenter(),
 
             ImageColumn::make('thumbnail')
                 ->label('Thumbnail')
-                ->disk('public'),
+                ->disk('public')
+                ->alignCenter(),
+
+            TextColumn::make('views')
+                ->label('Dilihat')
+                ->alignCenter(),
 
             BooleanColumn::make('is_hot')
                 ->label('Berita Hangat')
@@ -161,15 +166,15 @@ class ArticleResource extends Resource
                 ->falseIcon('heroicon-s-x-circle')
                 ->trueColor('danger')
                 ->falseColor('gray')
-                ->verticallyAlignStart(),
+                ->alignCenter(),
 
             BooleanColumn::make('is_headline')
                 ->label('Berita Utama')
                 ->trueIcon('heroicon-s-star')
                 ->falseIcon('heroicon-s-x-circle')
-                ->trueColor('primary')
+                ->trueColor('info')
                 ->falseColor('gray')
-                ->verticallyAlignStart(),
+                ->alignCenter(),
 
             BooleanColumn::make('is_featured')
                 ->label('Sorotan Pilihan')
@@ -177,7 +182,7 @@ class ArticleResource extends Resource
                 ->falseIcon('heroicon-s-x-circle')
                 ->trueColor('warning')
                 ->falseColor('gray')
-                ->verticallyAlignStart(),
+                ->alignCenter(),
 
             BooleanColumn::make('is_editor_choice')
                 ->label('Pilihan Editor')
@@ -185,15 +190,17 @@ class ArticleResource extends Resource
                 ->falseIcon('heroicon-s-x-circle')
                 ->trueColor('success')
                 ->falseColor('gray')
-                ->verticallyAlignStart(),
+                ->alignCenter(),
 
             TextColumn::make('created_at')
                 ->label('Tanggal Dibuat')
-                ->date('d M Y'),
+                ->date('d M Y')
+                ->alignCenter(),
 
             TextColumn::make('updated_at')
                 ->label('Tanggal Diupdate')
-                ->date('d M Y'),
+                ->date('d M Y')
+                ->alignCenter(),
         ])
             ->actions([
                 Tables\Actions\EditAction::make()
@@ -240,10 +247,12 @@ class ArticleResource extends Resource
 
         if ($user->hasRole('editor')) {
             return parent::getEloquentQuery()
+                ->with('author')
                 ->whereHas('author', fn($q) => $q->where('user_id', $user->id));
         }
 
         return parent::getEloquentQuery()
+            ->with('author')
             ->leftJoin('authors', 'articles.author_id', '=', 'authors.id')
             ->orderByRaw('CASE WHEN authors.user_id = ? THEN 0 ELSE 1 END', [$user->id])
             ->orderBy('articles.created_at', 'desc')

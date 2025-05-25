@@ -39,19 +39,10 @@ class CategoryResource extends Resource
                     ->visibility('public')
                     ->columnSpan('full'),
 
-                Select::make('name')
+                Forms\Components\TextInput::make('name')
                     ->label('Nama Kategori')
                     ->required()
-                    ->options([
-                        'Politik' => 'Politik',
-                        'Ekonomi & Bisnis' => 'Ekonomi & Bisnis',
-                        'Olahraga' => 'Olahraga',
-                        'Hiburan & Selebriti' => 'Hiburan & Selebriti',
-                        'Kesehatan & Gaya Hidup' => 'Kesehatan & Gaya Hidup',
-                        'Teknologi' => 'Teknologi',
-                        'Pendidikan' => 'Pendidikan',
-                    ])
-                    ->searchable()
+                    ->maxLength(100)
                     ->columnSpan('full'),
 
                 Forms\Components\TextInput::make('slug')

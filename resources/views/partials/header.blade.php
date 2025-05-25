@@ -7,7 +7,7 @@
 <header class="flex items-center justify-between px-6 py-4 border-b text-sm">
     <!-- Logo -->
     <div class="whitespace-nowrap">
-        <img src="{{ asset('images/Winni Code.png') }}" alt="Winni Code Logo" class="h-16 object-contain" />
+        <img src="{{ asset('images/Winni Code.png') }}" alt="WinniCode Logo" class="h-16 object-contain" />
     </div>
 
 

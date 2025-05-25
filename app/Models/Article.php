@@ -18,6 +18,7 @@ class Article extends Model
         'category_id',
         'author_id',
         'published_at',
+        'views',
         'is_hot',
         'is_headline',
         'is_featured',
@@ -31,6 +32,6 @@ class Article extends Model
 
     public function author()
     {
-        return $this->belongsTo(Author::class, 'user_id');
+        return $this->belongsTo(Author::class, 'author_id');
     }
 }

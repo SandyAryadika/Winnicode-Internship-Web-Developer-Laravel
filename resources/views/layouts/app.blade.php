@@ -12,7 +12,7 @@
     <!-- CSS Global -->
     <style>
         body {
-            font-family: 'Lexend', sans-serif;
+            font-family: 'Montserrat', sans-serif;
         }
 
         .font-birthstone {

@@ -21,7 +21,7 @@ use Spatie\Permission\Models\Role;
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
-    protected static ?string $navigationLabel = 'Pengguna';
+    protected static ?string $navigationLabel = 'Role';
     protected static ?string $navigationGroup = 'Manajemen Penggua';
     protected static ?string $navigationIcon = 'heroicon-o-user';
 
