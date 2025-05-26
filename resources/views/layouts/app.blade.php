@@ -8,6 +8,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Birthstone&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <!-- CSS Global -->
     <style>
@@ -27,6 +28,22 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease-out;
+        }
     </style>
 
     @stack('styles')
@@ -35,6 +52,33 @@
 <body>
 
     @yield('content')
+
+    @php
+        $type = session('success') ? 'success' : (session('error') ? 'error' : (session('message') ? 'error' : null));
+        $toastColors = [
+            'success' => 'bg-green-500 text-white',
+            'error' => 'bg-red-500 text-white',
+        ];
+        $icon =
+            $type === 'success'
+                ? '<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />'
+                : '<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />';
+    @endphp
+
+    @if ($type)
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show" x-transition.duration.300ms
+            class="fixed top-5 right-5 z-50 flex items-start w-full max-w-sm p-4 rounded-lg shadow-lg {{ $toastColors[$type] }}"
+            role="alert">
+            <span class="flex-1 text-sm font-medium">
+                {{ session('success') ?? (session('error') ?? session('message')) }}
+            </span>
+            <button @click="show = false" class="ml-4 text-white hover:text-gray-200 focus:outline-none">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </button>
+        </div>
+    @endif
 
     <!-- JS Global -->
     <script>

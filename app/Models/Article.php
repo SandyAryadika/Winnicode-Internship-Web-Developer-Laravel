@@ -34,4 +34,8 @@ class Article extends Model
     {
         return $this->belongsTo(Author::class, 'author_id');
     }
+
+    protected $casts = [
+        'published_at' => 'datetime',
+    ];
 }

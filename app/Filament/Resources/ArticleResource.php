@@ -21,6 +21,9 @@ use Filament\Forms\Components\Toggle;
 use Filament\Tables\Columns\BooleanColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Facades\Filament;
+use App\Mail\NewArticleNotification;
+use App\Models\Subscriber;
+use Illuminate\Support\Facades\Mail;
 
 class ArticleResource extends Resource
 {
@@ -269,5 +272,25 @@ class ArticleResource extends Resource
     public static function getRecordQueryKeyName(): ?string
     {
         return 'id';
+    }
+
+    public static function afterCreate(Article $article): void
+    {
+        $subscribers = Subscriber::all();
+        foreach ($subscribers as $subscriber) {
+            Mail::to($subscriber->email)->send(new NewArticleNotification($article));
+        }
+    }
+
+
+    public static function afterUpdate(Article $article): void
+    {
+        if ($article->isDirty('published_at')) {
+            $subscribers = Subscriber::all();
+
+            foreach ($subscribers as $subscriber) {
+                Mail::to($subscriber->email)->send(new NewArticleNotification($article));
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ use Filament\Support\Enums\VerticalAlignment;
 
 class TopAuthorsWidget extends BaseWidget
 {
-    protected static ?string $heading = 'Top 4 Penulis Terbanyak';
+    protected static ?string $heading = 'Top 5 Penulis Terbanyak';
 
     protected int|string|array $columnSpan = 'full';
 
@@ -21,7 +21,7 @@ class TopAuthorsWidget extends BaseWidget
     {
         return Author::withCount('articles')
             ->orderByDesc('articles_count')
-            ->limit(4);
+            ->limit(5);
     }
 
     protected function getTableColumns(): array
