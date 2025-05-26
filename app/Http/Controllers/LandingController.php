@@ -61,6 +61,54 @@ class LandingController extends Controller
             ->take(4)
             ->get();
 
-        return view('articles.show', compact('article', 'relatedPosts'));
+        $sameAuthor = Article::where('author_id', $article->author_id)
+            ->where('id', '!=', $article->id)
+            ->where('status', 'published')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        $sameCategory = Article::where('category_id', $article->category_id)
+            ->where('id', '!=', $article->id)
+            ->where('status', 'published')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        $editorChoice = Article::where('is_editor_choice', true)
+            ->where('id', '!=', $article->id)
+            ->where('status', 'published')
+            ->latest()
+            ->take(3)
+            ->get();
+
+        return view('articles.show', compact('article', 'relatedPosts', 'sameAuthor', 'sameCategory', 'editorChoice'));
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('q');
+
+        $results = Article::with(['category', 'author'])
+            ->where(function ($qbuilder) use ($query) {
+                $qbuilder->where('title', 'like', "%{$query}%")
+                    ->orWhere('content', 'like', "%{$query}%")
+                    ->orWhereHas('category', function ($categoryQuery) use ($query) {
+                        $categoryQuery->where('name', 'like', "%{$query}%");
+                    })
+                    ->orWhereHas('author', function ($authorQuery) use ($query) {
+                        $authorQuery->where('name', 'like', "%{$query}%");
+                    });
+            })
+            ->latest()
+            ->paginate(10);
+
+        // ⬅️ Pindahkan ini SETELAH `$results` didefinisikan
+        $results->appends(['q' => $query]);
+
+        // Ambil penulis yang cocok untuk ditampilkan terpisah
+        $matchedAuthors = Author::where('name', 'like', "%{$query}%")->get();
+
+        return view('search.results', compact('results', 'query', 'matchedAuthors'));
     }
 }

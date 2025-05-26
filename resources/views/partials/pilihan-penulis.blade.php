@@ -7,7 +7,7 @@
         @forelse ($editorChoiceArticles as $item)
             <div>
                 <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
-                    class="w-full h-48 object-cover rounded-lg mb-2" />
+                    class="w-full h-48 object-cover mb-2" />
                 <h4 class="font-semibold leading-snug line-clamp-2">{{ Str::limit($item->title, 80) }}</h4>
                 <div class="text-sm text-gray-500 mt-1">
                     {{ $item->category->name ?? '-' }} • {{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}

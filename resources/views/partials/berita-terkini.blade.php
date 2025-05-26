@@ -50,7 +50,7 @@
     @foreach ($beritaHangat->slice(3, 3) as $article)
         <div class="flex space-x-4">
             <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="{{ $article->title }}"
-                class="w-24 h-24 object-cover rounded-md" />
+                class="w-24 h-24 object-cover" />
             <div class="flex flex-col justify-between">
                 <h4 class="text-base font-semibold leading-snug">
                     {{ \Illuminate\Support\Str::limit($article->title, 100, '...') }}

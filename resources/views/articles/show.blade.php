@@ -1,58 +1,76 @@
 @extends('layouts.app')
 
+@include('partials.header')
+@include('partials.navbar')
 @section('content')
-    <section class="max-w-4xl mx-auto px-2 py-4">
-        {{-- Gambar Utama --}}
-        @if ($article->thumbnail)
-            <div class="mb-6">
-                <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="{{ $article->title }}"
-                    class="w-full h-[400px] object-cover rounded-2xl shadow-md">
-            </div>
-        @endif
+    {{-- Gambar Thumbnail Full Width --}}
+    @if ($article->thumbnail)
+        <div class="w-full px-4 md:px-10 lg:px-10 mt-12">
+            <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="{{ $article->title }}"
+                class="w-full h-[550px] object-cover shadow-md">
+        </div>
+    @endif
 
+    {{-- Konten Artikel --}}
+    <section class="max-w-4xl mx-auto px-4 py-8">
         {{-- Judul --}}
         <h1 class="text-4xl font-extrabold text-center mb-4 text-[#252525]">
             {{ $article->title }}
         </h1>
 
-        {{-- Tanggal & Kategori --}}
+        {{-- Info Meta --}}
         <div class="text-center text-sm text-gray-500 mb-6">
             Dipublikasikan {{ $article->published_at->format('d M Y') }} |
             Kategori: {{ $article->category->name ?? '-' }} |
             Oleh: {{ $article->author->name ?? 'Tim Winnicode' }}
         </div>
 
-        {{-- Isi Artikel --}}
+        {{-- Konten Artikel --}}
         <article class="prose prose-lg max-w-none text-justify mb-12">
             {!! $article->content !!}
         </article>
 
-        {{-- Komponen Newsletter --}}
+        {{-- Newsletter --}}
         @include('partials.newsletter')
 
-        {{-- Related Posts & More from Author --}}
-        <div class="mt-16 border-t pt-10">
-            <h2 class="text-2xl font-semibold mb-4 text-[#252525]">Bacaan lainnya</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                {{-- Related Post --}}
-                @foreach ($relatedPosts as $related)
-                    <div class="bg-[#FFF3FA] p-4 rounded-xl shadow hover:shadow-md transition">
-                        <a href="{{ route('articles.show', $related->id) }}">
-                            <h3 class="text-lg font-bold mb-2 text-[#252525]">{{ $related->title }}</h3>
-                            <p class="text-sm text-gray-600">
-                                {{ \Illuminate\Support\Str::limit(strip_tags($related->content), 100) }}
-                            </p>
-                        </a>
-                    </div>
-                @endforeach
-            </div>
+        {{-- Related Posts --}}
+        <div class="mt-8 border-t pt-10">
+            <h2 class="text-6xl font-semibold mb-4 text-[#252525] font-birthstone">Bacaan lainnya ></h2>
+
+            {{-- Dari penulis yang sama --}}
+            @if ($sameAuthor->count())
+                <h3 class="text-xl font-semibold mb-2 text-[#252525]">Dari penulis yang sama</h3>
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    @foreach ($sameAuthor as $related)
+                        @include('components.related-card', ['related' => $related])
+                    @endforeach
+                </div>
+            @endif
+
+            {{-- Dari kategori yang sama --}}
+            @if ($sameCategory->count())
+                <h3 class="text-xl font-semibold mb-2 text-[#252525]">Dari kategori yang sama</h3>
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    @foreach ($sameCategory as $related)
+                        @include('components.related-card', ['related' => $related])
+                    @endforeach
+                </div>
+            @endif
+
+            {{-- Rekomendasi (Pilihan Editor) --}}
+            @if ($editorChoice->count())
+                <h3 class="text-xl font-semibold mb-2 text-[#252525]">Rekomendasi untuk Anda</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    @foreach ($editorChoice as $related)
+                        @include('components.related-card', ['related' => $related])
+                    @endforeach
+                </div>
+            @endif
         </div>
 
         {{-- Komentar --}}
         <div class="mt-16 border-t pt-10">
             <h2 class="text-2xl font-semibold mb-4 text-[#252525]">Komentar</h2>
-
-            {{-- Komentar Disqus, Facebook, atau internal --}}
             <div id="disqus_thread"></div>
             <script>
                 var disqus_config = function() {
@@ -69,5 +87,6 @@
             </script>
         </div>
     </section>
+
     @include('partials.footer')
 @endsection

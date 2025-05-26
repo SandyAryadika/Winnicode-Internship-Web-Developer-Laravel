@@ -22,7 +22,7 @@
             </div>
             <div class="basis-full md:basis-2/3">
                 <img src="{{ $utama->thumbnail ? asset('storage/' . $utama->thumbnail) : asset('images/default.jpg') }}"
-                    alt="Gambar Sorotan" class="rounded-lg w-full h-52 md:h-full object-cover">
+                    alt="Gambar Sorotan" class="w-full h-52 md:h-full object-cover">
             </div>
         </div>
 
@@ -31,7 +31,7 @@
             @foreach ($artikelSorotan->skip(1) as $item)
                 <div>
                     <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
-                        alt="Sub Sorotan" class="w-full h-36 object-cover rounded-lg mb-2">
+                        alt="Sub Sorotan" class="w-full h-36 object-cover mb-2">
                     <h4 class="text-sm font-semibold leading-snug">{{ Str::limit($item->title, 70) }}</h4>
                     <div class="text-xs text-gray-500 mt-1">
                         {{ $item->category->name ?? 'Tanpa Kategori' }} |

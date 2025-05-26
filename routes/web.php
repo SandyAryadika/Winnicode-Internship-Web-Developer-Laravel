@@ -9,5 +9,5 @@ use App\Http\Controllers\SearchController;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 Route::post('/subscribe', [SubscriberController::class, 'store'])->name('subscribe');
-Route::get('/search', [SearchController::class, 'index'])->name('search');
-Route::get('/artikel/{id}', [LandingController::class, 'show'])->name('articles.show');
+Route::get('/search', [LandingController::class, 'search'])->name('search');
+Route::get('/artikel/{slug}', [LandingController::class, 'show'])->name('articles.show');

@@ -10,7 +10,7 @@
             @if (isset($beritaUtama[0]))
                 <div>
                     <img src="{{ $beritaUtama[0]->thumbnail ? asset('storage/' . $beritaUtama[0]->thumbnail) : asset('images/default.jpg') }}"
-                        alt="{{ $beritaUtama[0]->title }}" class="rounded-lg w-full h-56 object-cover">
+                        alt="{{ $beritaUtama[0]->title }}" class="w-full h-56 object-cover">
                     <h3 class="mt-3 font-semibold text-lg leading-snug">
                         {{ $beritaUtama[0]->title }}
                     </h3>
@@ -28,7 +28,7 @@
                 @foreach ($beritaUtama->slice(1, 2) as $item)
                     <div class="flex items-start gap-3">
                         <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
-                            alt="{{ $item->title }}" class="w-24 h-24 rounded-lg object-cover">
+                            alt="{{ $item->title }}" class="w-24 h-24 object-cover">
                         <div>
                             <h4 class="text-sm font-semibold leading-snug">
                                 {{ \Illuminate\Support\Str::limit($item->title, 150, '...') }}
@@ -49,7 +49,7 @@
             @if (isset($beritaUtama[3]))
                 <div class="flex flex-col lg:flex-row gap-4">
                     <img src="{{ $beritaUtama[3]->thumbnail ? asset('storage/' . $beritaUtama[3]->thumbnail) : asset('images/default.jpg') }}"
-                        alt="{{ $beritaUtama[3]->title }}" class="w-full lg:w-1/2 h-80 object-cover rounded-lg">
+                        alt="{{ $beritaUtama[3]->title }}" class="w-full lg:w-1/2 h-80 object-cover">
                     <div class="w-full lg:w-1/2">
                         <h3 class="font-bold text-xl leading-snug">
                             {{ $beritaUtama[3]->title }}
@@ -72,7 +72,7 @@
                 @foreach ($beritaUtama->slice(4, 2) as $item)
                     <div class="flex flex-col">
                         <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
-                            alt="{{ $item->title }}" class="w-full h-40 object-cover rounded-lg">
+                            alt="{{ $item->title }}" class="w-full h-40 object-cover">
                         <h4 class="font-semibold mt-2 leading-snug">{{ $item->title }}</h4>
                         <p class="text-sm text-gray-600">
                             {{ \Illuminate\Support\Str::limit(strip_tags($item->content), 40, '...') }}
