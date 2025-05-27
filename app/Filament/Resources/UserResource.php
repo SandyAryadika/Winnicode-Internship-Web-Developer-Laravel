@@ -91,6 +91,7 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
+                    ->color('info')
                     ->visible(fn() => auth()->user()->hasRole('admin')),
                 Tables\Actions\DeleteAction::make()
                     ->visible(fn() => auth()->user()->hasRole('admin')),

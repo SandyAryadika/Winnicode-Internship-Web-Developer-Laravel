@@ -13,7 +13,7 @@ use Filament\Support\Enums\VerticalAlignment;
 
 class TopAuthorsWidget extends BaseWidget
 {
-    protected static ?string $heading = 'Top 5 Penulis Terbanyak';
+    protected static ?string $heading = 'Top 5 Kontributor';
 
     protected int|string|array $columnSpan = 'full';
 

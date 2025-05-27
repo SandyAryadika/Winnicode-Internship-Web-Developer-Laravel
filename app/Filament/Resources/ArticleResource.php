@@ -24,6 +24,9 @@ use Filament\Facades\Filament;
 use App\Mail\NewArticleNotification;
 use App\Models\Subscriber;
 use Illuminate\Support\Facades\Mail;
+use Filament\Forms\Components\RichEditor;
+use Closure;
+use Filament\Forms\Get;
 
 class ArticleResource extends Resource
 {
@@ -50,7 +53,11 @@ class ArticleResource extends Resource
                 ->maxLength(255)
                 ->columnSpan('full'),
 
-            Textarea::make('content')
+            RichEditor::make('content')
+                ->disableToolbarButtons([
+                    'attachFiles',
+                ])
+                ->disableGrammarly()
                 ->label('Konten Artikel')
                 ->required()
                 ->columnSpan('full'),
@@ -100,25 +107,57 @@ class ArticleResource extends Resource
                 ->label('Berita Hangat')
                 ->helperText('Aktifkan jika artikel ini merupakan berita yang sedang tren atau penting.')
                 ->default(false)
-                ->columnSpan('full'),
+                ->columnSpan('full')
+                ->reactive()
+                ->afterStateUpdated(function (callable $set, $state) {
+                    if ($state) {
+                        $set('is_headline', false);
+                        $set('is_featured', false);
+                        $set('is_editor_choice', false);
+                    }
+                }),
 
             Toggle::make('is_headline')
                 ->label('Berita Utama')
                 ->helperText('Tandai artikel ini sebagai berita utama.')
                 ->default(false)
-                ->columnSpan('full'),
+                ->columnSpan('full')
+                ->reactive()
+                ->afterStateUpdated(function (callable $set, $state) {
+                    if ($state) {
+                        $set('is_hot', false);
+                        $set('is_featured', false);
+                        $set('is_editor_choice', false);
+                    }
+                }),
 
             Toggle::make('is_featured')
                 ->label('Sorotan Pilihan')
                 ->helperText('Tampilkan artikel ini di bagian sorotan pilihan.')
                 ->default(false)
-                ->columnSpan('full'),
+                ->columnSpan('full')
+                ->reactive()
+                ->afterStateUpdated(function (callable $set, $state) {
+                    if ($state) {
+                        $set('is_hot', false);
+                        $set('is_headline', false);
+                        $set('is_editor_choice', false);
+                    }
+                }),
 
             Toggle::make('is_editor_choice')
                 ->label('Pilihan Editor')
                 ->helperText('Artikel ini dipilih langsung oleh editor.')
                 ->default(false)
-                ->columnSpan('full'),
+                ->columnSpan('full')
+                ->reactive()
+                ->afterStateUpdated(function (callable $set, $state) {
+                    if ($state) {
+                        $set('is_hot', false);
+                        $set('is_headline', false);
+                        $set('is_featured', false);
+                    }
+                }),
         ]);
     }
 
@@ -292,5 +331,27 @@ class ArticleResource extends Resource
                 Mail::to($subscriber->email)->send(new NewArticleNotification($article));
             }
         }
+    }
+
+    public static function rules(): array
+    {
+        return [
+            '*.is_hot' => [function ($attribute, $value, $fail) {
+                $data = request()->all();
+
+                $toggles = [
+                    $data['is_hot'] ?? false,
+                    $data['is_headline'] ?? false,
+                    $data['is_featured'] ?? false,
+                    $data['is_editor_choice'] ?? false,
+                ];
+
+                $active = array_filter($toggles);
+
+                if (count($active) !== 1) {
+                    $fail('Pilih **tepat satu** jenis artikel (Hot, Headline, Sorotan, atau Pilihan Editor).');
+                }
+            }],
+        ];
     }
 }

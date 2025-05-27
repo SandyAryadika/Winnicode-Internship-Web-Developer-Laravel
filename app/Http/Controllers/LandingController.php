@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use App\Models\Author;
+use App\Models\User;
 
 class LandingController extends Controller
 {
@@ -103,10 +104,8 @@ class LandingController extends Controller
             ->latest()
             ->paginate(10);
 
-        // ⬅️ Pindahkan ini SETELAH `$results` didefinisikan
         $results->appends(['q' => $query]);
 
-        // Ambil penulis yang cocok untuk ditampilkan terpisah
         $matchedAuthors = Author::where('name', 'like', "%{$query}%")->get();
 
         return view('search.results', compact('results', 'query', 'matchedAuthors'));

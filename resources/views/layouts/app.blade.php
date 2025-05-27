@@ -29,6 +29,10 @@
             scrollbar-width: none;
         }
 
+        article.prose>*+* {
+            margin-top: 1.25em;
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -66,7 +70,7 @@
     @endphp
 
     @if ($type)
-        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 4000)" x-show="show" x-transition.duration.300ms
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show" x-transition.duration.300ms
             class="fixed top-5 right-5 z-50 flex items-start w-full max-w-sm p-4 rounded-lg shadow-lg {{ $toastColors[$type] }}"
             role="alert">
             <span class="flex-1 text-sm font-medium">

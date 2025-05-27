@@ -8,9 +8,10 @@
         <div class="flex flex-col gap-6 h-full">
             <!-- 1 Besar -->
             @if (isset($beritaUtama[0]))
-                <div>
+                <a href="{{ route('articles.show', $beritaUtama[0]->id) }}" class="group block">
                     <img src="{{ $beritaUtama[0]->thumbnail ? asset('storage/' . $beritaUtama[0]->thumbnail) : asset('images/default.jpg') }}"
-                        alt="{{ $beritaUtama[0]->title }}" class="w-full h-56 object-cover">
+                        alt="{{ $beritaUtama[0]->title }}"
+                        class="w-full h-56 object-cover group-hover:brightness-90 transition">
                     <h3 class="mt-3 font-semibold text-lg leading-snug">
                         {{ $beritaUtama[0]->title }}
                     </h3>
@@ -20,17 +21,18 @@
                         <span>{{ number_format($beritaUtama[0]->views) }} 👁</span> |
                         <span>{{ $beritaUtama[0]->comments_count ?? 0 }} 💬</span>
                     </div>
-                </div>
+                </a>
             @endif
 
             <!-- 2 Kecil Vertikal -->
             <div class="flex flex-col justify-between h-[14.5rem] gap-4">
                 @foreach ($beritaUtama->slice(1, 2) as $item)
-                    <div class="flex items-start gap-3">
+                    <a href="{{ route('articles.show', $item->id) }}"
+                        class="flex items-start gap-3 group hover:bg-pink-50 p-2 transition">
                         <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
                             alt="{{ $item->title }}" class="w-24 h-24 object-cover">
                         <div>
-                            <h4 class="text-sm font-semibold leading-snug">
+                            <h4 class="text-sm font-semibold leading-snug line-clamp-2">
                                 {{ \Illuminate\Support\Str::limit($item->title, 150, '...') }}
                             </h4>
                             <div class="text-xs text-gray-500 mt-1">
@@ -38,7 +40,7 @@
                                 {{ \Carbon\Carbon::parse($item->published_at)->format('d/m/Y') }}
                             </div>
                         </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
         </div>
@@ -47,9 +49,11 @@
         <div class="lg:col-span-2 flex flex-col gap-6">
             <!-- Kanan Atas - 1 Besar Horizontal -->
             @if (isset($beritaUtama[3]))
-                <div class="flex flex-col lg:flex-row gap-4">
+                <a href="{{ route('articles.show', $beritaUtama[3]->id) }}"
+                    class="flex flex-col lg:flex-row gap-4 group">
                     <img src="{{ $beritaUtama[3]->thumbnail ? asset('storage/' . $beritaUtama[3]->thumbnail) : asset('images/default.jpg') }}"
-                        alt="{{ $beritaUtama[3]->title }}" class="w-full lg:w-1/2 h-80 object-cover">
+                        alt="{{ $beritaUtama[3]->title }}"
+                        class="w-full lg:w-1/2 h-80 object-cover group-hover:brightness-90 transition">
                     <div class="w-full lg:w-1/2">
                         <h3 class="font-bold text-xl leading-snug">
                             {{ $beritaUtama[3]->title }}
@@ -64,16 +68,19 @@
                             <span>{{ $beritaUtama[3]->comments_count ?? 0 }} 💬</span>
                         </div>
                     </div>
-                </div>
+                </a>
             @endif
 
             <!-- 2 Horizontal Sejajar -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-[14.5rem]">
                 @foreach ($beritaUtama->slice(4, 2) as $item)
-                    <div class="flex flex-col">
+                    <a href="{{ route('articles.show', $item->id) }}"
+                        class="flex flex-col group hover:bg-pink-50 p-2 transition">
                         <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
                             alt="{{ $item->title }}" class="w-full h-40 object-cover">
-                        <h4 class="font-semibold mt-2 leading-snug">{{ $item->title }}</h4>
+                        <h4 class="font-semibold mt-2 leading-snug">
+                            {{ $item->title }}
+                        </h4>
                         <p class="text-sm text-gray-600">
                             {{ \Illuminate\Support\Str::limit(strip_tags($item->content), 40, '...') }}
                         </p>
@@ -83,7 +90,7 @@
                             <span>{{ number_format($item->views) }} 👁</span> |
                             <span>{{ $item->comments_count ?? 0 }} 💬</span>
                         </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
         </div>

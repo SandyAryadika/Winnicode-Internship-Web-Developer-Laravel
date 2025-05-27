@@ -5,7 +5,7 @@
     @if ($artikelSorotan->isNotEmpty())
         <!-- Featured Main (artikel pertama) -->
         @php $utama = $artikelSorotan->first(); @endphp
-        <div class="flex flex-col md:flex-row gap-6 items-start">
+        <a href="{{ route('articles.show', $utama->id) }}" class="flex flex-col md:flex-row gap-6 items-start group">
             <div class="basis-full md:basis-1/3 space-y-2">
                 <h3 class="text-2xl font-bold leading-snug">
                     {{ Str::limit($utama->title, 150) }}
@@ -22,24 +22,27 @@
             </div>
             <div class="basis-full md:basis-2/3">
                 <img src="{{ $utama->thumbnail ? asset('storage/' . $utama->thumbnail) : asset('images/default.jpg') }}"
-                    alt="Gambar Sorotan" class="w-full h-52 md:h-full object-cover">
+                    alt="Gambar Sorotan"
+                    class="w-full h-52 md:h-full object-cover group-hover:brightness-90 transition">
             </div>
-        </div>
+        </a>
 
         <!-- Featured List -->
         <div class="grid grid-cols-2 md:grid-cols-4 my-6 gap-4">
             @foreach ($artikelSorotan->skip(1) as $item)
-                <div>
+                <a href="{{ route('articles.show', $item->id) }}" class="group hover:bg-pink-50 p-2">
                     <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
                         alt="Sub Sorotan" class="w-full h-36 object-cover mb-2">
-                    <h4 class="text-sm font-semibold leading-snug">{{ Str::limit($item->title, 70) }}</h4>
+                    <h4 class="text-sm font-semibold leading-snug line-clamp-2">
+                        {{ Str::limit($item->title, 70) }}
+                    </h4>
                     <div class="text-xs text-gray-500 mt-1">
                         {{ $item->category->name ?? 'Tanpa Kategori' }} |
                         {{ $item->published_at->format('d/m/Y') }} |
                         {{ number_format($item->views) }} 👁 |
                         {{ $item->comments_count ?? '0' }} 💬
                     </div>
-                </div>
+                </a>
             @endforeach
         </div>
     @else

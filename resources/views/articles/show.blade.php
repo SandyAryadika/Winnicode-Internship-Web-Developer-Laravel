@@ -26,7 +26,7 @@
         </div>
 
         {{-- Konten Artikel --}}
-        <article class="prose prose-lg max-w-none text-justify mb-12">
+        <article class="prose prose-lg max-w-none text-justify mb-12 ">
             {!! $article->content !!}
         </article>
 

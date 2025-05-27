@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Subscriber;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\RateLimiter;
 
 class SubscriberController extends Controller
@@ -12,24 +11,24 @@ class SubscriberController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email' => 'required|email|email',
+            'email' => 'required|email',
         ]);
 
         $key = 'subscribe:' . $request->ip();
         if (RateLimiter::tooManyAttempts($key, 1)) {
-            return Redirect::to('/#newsletter')->with('error', 'Tunggu sebentar sebelum mencoba lagi.');
+            return redirect()->back()->with('error', 'Tunggu sebentar sebelum mencoba lagi.');
         }
 
         RateLimiter::hit($key, 15);
 
         if (Subscriber::where('email', $request->email)->exists()) {
-            return Redirect::to('/#newsletter')->with('error', 'Email ini sudah terdaftar untuk newsletter.');
+            return redirect()->back()->with('error', 'Email ini sudah terdaftar untuk newsletter.');
         }
 
         Subscriber::create([
             'email' => $request->email,
         ]);
 
-        return Redirect::to('/#newsletter')->with('success', 'Terima kasih telah berlangganan!');
+        return redirect()->back()->with('success', 'Terima kasih telah berlangganan!');
     }
 }
