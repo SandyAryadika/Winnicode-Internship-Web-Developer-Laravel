@@ -7,13 +7,14 @@
     <title>@yield('title', 'Winnicode')</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Birthstone&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @vite('resources/css/app.css')
 
     <!-- CSS Global -->
     <style>
         body {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Noto Sans', sans-serif;
         }
 
         .font-birthstone {
@@ -27,10 +28,6 @@
         .scrollbar-hide {
             -ms-overflow-style: none;
             scrollbar-width: none;
-        }
-
-        article.prose>*+* {
-            margin-top: 1.25em;
         }
 
         @keyframes fadeIn {

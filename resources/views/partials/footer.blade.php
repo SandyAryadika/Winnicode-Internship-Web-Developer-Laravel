@@ -2,7 +2,7 @@
     <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 border-t pt-12">
         <!-- About -->
         <div>
-            <h4 class="font-bold mb-3">About Us</h4>
+            <h4 class="font-bold mb-3 text-lg">About Us</h4>
             <p class="text-sm text-gray-600">Jurnalistik Program winnicode adalah program pengembangan sumber daya
                 manusia yang ditujukan bagi pemuda pemudi yang berkarir di dunia report.</p>
         </div>
@@ -21,7 +21,7 @@
 
         <!-- Kontak Kami -->
         <div>
-            <h4 class="font-bold mb-4">Kontak Kami</h4>
+            <h4 class="font-bold mb-4 text-lg">Kontak Kami</h4>
             <ul class="space-y-2 text-sm text-gray-600">
                 <li><span class="text-black font-medium">E-Mail:</span> winnicodegarudaofficial@gmail.com</li>
                 <li><span class="text-black font-medium">Call Center:</span><br> 6285159932501 (24 Jam)</li>
@@ -30,7 +30,7 @@
 
         <!-- Social Media -->
         <div>
-            <h4 class="font-bold mb-3">Follow Us</h4>
+            <h4 class="font-bold mb-3 text-lg">Follow Us</h4>
             <div class="flex gap-4">
                 <!-- Website -->
                 <a href="https://winnicode.com/" target="_blank" class="hover:opacity-80 transition">

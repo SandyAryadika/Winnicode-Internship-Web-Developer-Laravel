@@ -27,7 +27,7 @@
 
         {{-- Konten Artikel --}}
         <article class="prose prose-lg max-w-none text-justify mb-12 ">
-            {!! $article->content !!}
+            {!! modifyArticleContent($article->content) !!}
         </article>
 
         {{-- Newsletter --}}

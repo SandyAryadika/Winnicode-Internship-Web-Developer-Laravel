@@ -36,7 +36,7 @@
                                 {{ \Illuminate\Support\Str::limit($item->title, 150, '...') }}
                             </h4>
                             <div class="text-xs text-gray-500 mt-1">
-                                {{ $item->category->name ?? '-' }} &bull;
+                                {{ $item->category->name ?? '-' }} |
                                 {{ \Carbon\Carbon::parse($item->published_at)->format('d/m/Y') }}
                             </div>
                         </div>

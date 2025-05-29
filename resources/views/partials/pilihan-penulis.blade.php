@@ -12,7 +12,7 @@
                     {{ Str::limit($item->title, 80) }}
                 </h4>
                 <div class="text-sm text-gray-500 mt-1">
-                    {{ $item->category->name ?? '-' }} •
+                    {{ $item->category->name ?? '-' }} |
                     {{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}
                 </div>
             </a>

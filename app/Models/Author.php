@@ -10,7 +10,9 @@ class Author extends Model
 
     public function articles()
     {
-        return $this->hasMany(Article::class, 'author_id');
+        return $this->hasMany(Article::class, 'author_id', 'id')
+            ->whereNotNull('published_at')
+            ->orderByDesc('published_at');
     }
     public function getPhotoUrlAttribute()
     {

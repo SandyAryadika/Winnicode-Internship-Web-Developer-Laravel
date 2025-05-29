@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use App\Models\Author;
-use App\Models\User;
+use App\Models\Category;
 
 class LandingController extends Controller
 {
@@ -43,12 +43,15 @@ class LandingController extends Controller
             ->take(5)
             ->get();
 
+        $categories = Category::orderBy('name')->get();
+
         return view('landing', [
             'beritaHangat' => $beritaHangat,
             'beritaUtama' => $beritaUtama,
             'artikelSorotan' => $artikelSorotan,
             'editorChoiceArticles' => $editorChoiceArticles,
             'topContributors' => $topContributors,
+            'categories' => $categories,
         ]);
     }
 

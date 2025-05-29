@@ -35,7 +35,8 @@
             class="flex flex-col sm:flex-row justify-center gap-4 max-w-xl mx-auto">
             @csrf
             <input type="email" name="email" required placeholder="Masukkan Email Anda..."
-                class="w-full sm:w-auto flex-1 px-4 py-2 border rounded-full focus:outline-none focus:ring focus:border-blue-300">
+                class="w-full sm:w-auto flex-1 px-4 py-2 border rounded-full focus:outline-none focus:border-blue-600"
+                style="border-color: rgba(0, 0, 0, 0.253);">
             <button type="submit"
                 class="bg-[#F2F4FF] shadow-lg shadow-[#F2F4FF]-500/50 text-black px-6 py-2 rounded-full border border-gray-300">
                 Subscribe

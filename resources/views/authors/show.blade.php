@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profil Kontributor')
+@section('title', 'Profil Penulis')
 
 @include('partials.header')
 @include('partials.navbar')
@@ -15,7 +15,7 @@
                 <div
                     class="bg-white rounded-lg p-6  flex flex-col items-center text-center md:flex-row md:items-center md:text-left md:gap-6">
                     <img src="{{ $author->photo ? asset('storage/' . $author->photo) : asset('images/default.jpg') }}"
-                        alt="{{ $author->name }}" class="w-48 h-48 rounded-full object-cover border mb-4 md:mb-0">
+                        alt="{{ $author->name }}" class="w-48 h-48 rounded-full object-cover mb-4 md:mb-0">
                     <div>
                         <h3 class="text-2xl font-bold text-[#252525]">{{ $author->name }}</h3>
                         <p class="text-medium text-[#252525] mt-3">{{ $author->articles->count() }} artikel</p>
@@ -27,28 +27,39 @@
             </div>
         @endif
 
-
-        {{-- ARTIKEL DARI AUTHOR --}}
-        <div class="border-t border-gray-300 mt-10 pt-10">
+        {{-- Artikel dari Author --}}
+        <div class="border-t border-gray-300 pt-10">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                @if ($author && $author->articles->count())
-                    @foreach ($author->articles->take(12) as $article)
-                        <div class="bg-white shadow-md overflow-hidden hover:shadow transition">
-                            <a href="{{ route('articles.show', $article->id) }}">
-                                <img src="{{ $article->thumbnail ? asset('storage/' . $article->thumbnail) : asset('images/default.jpg') }}"
-                                    alt="{{ $article->title }}" class="w-full h-50 object-cover">
-                                <div class="p-4">
-                                    <h3 class="text-base font-semibold text-gray-800 mb-1">{{ $article->title }}</h3>
-                                    <p class="text-sm text-gray-600">{{ Str::limit($article->excerpt, 100) }}</p>
-                                </div>
-                            </a>
+                @forelse ($articles as $article)
+                    <a href="{{ route('articles.show', $article->id) }}"
+                        class="block bg-white overflow-hidden border rounded-md transition-all duration-200 hover:shadow-lg hover:scale-[1.01] hover:ring-2 hover:ring-blue-200"
+                        style="border-color: #F2F4FF;">
+                        <img src="{{ $article->thumbnail ? asset('storage/' . $article->thumbnail) : asset('images/default.jpg') }}"
+                            alt="{{ $article->title }}" class="w-full h-40 object-cover">
+                        <div class="p-4">
+                            <h4 class="text-base font-semibold text-gray-800 mb-1">
+                                {{ Str::limit($article->title, 50) }}
+                            </h4>
+                            <p class="text-xs text-gray-500 mb-1">
+                                {{ $article->category->name ?? '-' }} |
+                                {{ $article->published_at ? $article->published_at->format('d M Y') : 'Belum dipublikasikan' }}
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                {{ Str::limit(strip_tags($article->content), 97) }}
+                            </p>
                         </div>
-                    @endforeach
-                @else
+                    </a>
+                @empty
                     <div class="col-span-3 text-center py-8">
                         <p class="text-gray-500">Belum ada artikel yang ditulis oleh kontributor ini.</p>
                     </div>
-                @endif
+                @endforelse
+
+                {{-- Pagination --}}
+                <div class="mt-8">
+                    {{ $articles->links('pagination::tailwind') }}
+                </div>
+
             </div>
         </div>
     </section>

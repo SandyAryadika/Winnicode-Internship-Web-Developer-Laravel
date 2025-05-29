@@ -11,12 +11,16 @@ class AuthorController extends Controller
 {
     public function show($id)
     {
-        $author = Author::withCount('articles')
-            ->with(['articles' => function ($query) {
-                $query->latest()->take(5);
-            }])
-            ->findOrFail($id);
+        $author = Author::withCount(['articles' => function ($query) {
+            $query->whereNotNull('published_at');
+        }])->findOrFail($id);
 
-        return view('authors.show', compact('author'));
+        $articles = Article::where('author_id', $author->id)
+            ->whereNotNull('published_at')
+            ->orderByDesc('published_at')
+            ->latest()
+            ->paginate(12);
+
+        return view('authors.show', compact('author', 'articles'));
     }
 }
