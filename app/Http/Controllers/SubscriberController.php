@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Subscriber;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use App\Notifications\NewSubscriberNotification;
+use Illuminate\Support\Facades\Notification;
 
 class SubscriberController extends Controller
 {
@@ -28,6 +30,9 @@ class SubscriberController extends Controller
         Subscriber::create([
             'email' => $request->email,
         ]);
+
+        $adminEmail = 'winnicode@news.com';
+        Notification::route('mail', $adminEmail)->notify(new NewSubscriberNotification($subscriber));
 
         return redirect()->back()->with('success', 'Terima kasih telah berlangganan!');
     }

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Profil Penulis')
+@section('title', $author->name . ' - Profil Penulis | Winnicode')
 
 @include('partials.header')
 @include('partials.navbar')
@@ -9,7 +9,6 @@
         <h2 class="text-6xl font-semibold font-birthstone mb-6 pl-6">Profile Penulis <span class="text-[#FF66C4]">&gt;</span>
         </h2>
 
-        {{-- PROFIL AUTHOR (1 baris penuh, ditengah) --}}
         @if ($author)
             <div class="flex justify-center mb-8">
                 <div
@@ -27,13 +26,11 @@
             </div>
         @endif
 
-        {{-- Artikel dari Author --}}
         <div class="border-t border-gray-300 pt-10">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @forelse ($articles as $article)
                     <a href="{{ route('articles.show', $article->id) }}"
-                        class="block bg-white overflow-hidden border rounded-md transition-all duration-200 hover:shadow-lg hover:scale-[1.01] hover:ring-2 hover:ring-blue-200"
-                        style="border-color: #F2F4FF;">
+                        class="block bg-white overflow-hidden border shadow-sm rounded-md transition-all duration-300 hover:shadow-lg hover:scale-[1.01] hover:ring-2 hover:ring-blue-200">
                         <img src="{{ $article->thumbnail ? asset('storage/' . $article->thumbnail) : asset('images/default.jpg') }}"
                             alt="{{ $article->title }}" class="w-full h-40 object-cover">
                         <div class="p-4">
@@ -55,7 +52,6 @@
                     </div>
                 @endforelse
 
-                {{-- Pagination --}}
                 <div class="mt-8">
                     {{ $articles->links('pagination::tailwind') }}
                 </div>

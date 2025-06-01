@@ -10,7 +10,6 @@
             🔍 Hasil pencarian untuk: <span class="italic text-blue-600">"{{ $query }}"</span>
         </h2>
 
-        {{-- Bagian Penulis --}}
         @if ($matchedAuthors->count())
             <div class="mb-12">
                 <h3 class="text-xl font-semibold mb-6 text-gray-700">👤 Penulis yang cocok:</h3>
@@ -33,7 +32,6 @@
             </div>
         @endif
 
-        {{-- Bagian Artikel --}}
         @if ($results->count())
             <h3 class="text-md font-semibold mb-3 text-gray-700"> Artikel yang sesuai:</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -67,7 +65,6 @@
             <p class="text-gray-600 mt-6">⚠️ Tidak ada hasil ditemukan.</p>
         @endif
 
-        {{-- Pagination --}}
         <div class="mt-8">
             {{ $results->links('pagination::tailwind') }}
         </div>

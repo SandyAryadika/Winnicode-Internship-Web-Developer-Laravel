@@ -3,8 +3,12 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\User;
+use App\Models\Category;
 use App\Models\Article;
-use App\Policies\ArticlePolicy;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,7 +25,24 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {
+            $view->with('categories', Category::all());
+        });
+
+        View::composer('*', function ($view) {
+            $view->with('authors', User::whereHas('articles')->take(12)->get());
+        });
+
+        View::composer('*', function ($view) {
+            $view->with('latestArticles', Article::where('status', 'published')
+                ->whereNotNull('published_at')
+                ->latest('published_at')
+                ->take(5)
+                ->get());
+        });
+
+        setlocale(LC_TIME, 'id_ID.UTF-8');
+        Carbon::setLocale('id');
     }
     protected $policies = [
         \App\Models\Author::class => \App\Policies\AuthorPolicy::class,

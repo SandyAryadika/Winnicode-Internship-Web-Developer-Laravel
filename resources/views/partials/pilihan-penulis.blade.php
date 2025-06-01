@@ -1,13 +1,14 @@
 <!-- Pilihan Penulis -->
 <section class="py-6 px-6">
-    <h2 class="text-6xl font-semibold border-b border-t font-birthstone mb-6 pl-6">Pilihan Penulis <span
+    <h2 class="text-6xl font-semibold border-b border-t font-birthstone mb-6 pl-6 tracking-wide">Pilihan Penulis <span
             class="text-[#FF66C4]">&gt;</span></h2>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @forelse ($editorChoiceArticles as $item)
-            <a href="{{ route('articles.show', $item->id) }}" class="group hover:bg-pink-50 p-2">
+            <a href="{{ route('articles.show', $item->id) }}"
+                class="group p-2 border rounded-md hover:shadow-lg transition">
                 <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
-                    alt="{{ $item->title }}" class="w-full h-48 object-cover mb-2" />
+                    alt="{{ $item->title }}" class="w-full h-48 object-cover mb-2 rounded-md" />
                 <h4 class="font-semibold leading-snug line-clamp-2">
                     {{ Str::limit($item->title, 80) }}
                 </h4>

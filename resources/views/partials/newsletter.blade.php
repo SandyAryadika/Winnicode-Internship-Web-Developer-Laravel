@@ -3,7 +3,6 @@
     <p id="toast-message" class="text-sm text-gray-800"></p>
 </div>
 
-<!-- Newsletter -->
 <section class="px-6 py-16">
     <div class="max-w-4xl mx-auto text-center mb-12">
         <h3 class="text-3xl font-bold mb-2">Stay Updated</h3>
@@ -11,8 +10,7 @@
             Subscribe kami untuk mendapatkan berita terbaru dan pembaruan eksklusif
         </p>
 
-        <!-- Feedback Message -->
-        {{-- @if (session('success'))
+        @if (session('success'))
             <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
                 {{ session('success') }}
             </div>
@@ -28,9 +26,8 @@
             <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
                 {{ $errors->first() }}
             </div>
-        @endif --}}
+        @endif
 
-        <!-- Newsletter Form -->
         <form method="POST" action="{{ route('subscriber.store') }}"
             class="flex flex-col sm:flex-row justify-center gap-4 max-w-xl mx-auto">
             @csrf
@@ -38,7 +35,7 @@
                 class="w-full sm:w-auto flex-1 px-4 py-2 border rounded-full focus:outline-none focus:border-blue-600"
                 style="border-color: rgba(0, 0, 0, 0.253);">
             <button type="submit"
-                class="bg-[#F2F4FF] shadow-lg shadow-[#F2F4FF]-500/50 text-black px-6 py-2 rounded-full border border-gray-300">
+                class="bg-blue-400 text-white px-6 py-2 rounded-full border border-gray-300 shadow-md hover:shadow-lg transition">
                 Subscribe
             </button>
         </form>

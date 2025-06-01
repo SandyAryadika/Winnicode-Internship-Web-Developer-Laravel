@@ -9,7 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Birthstone&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    @vite('resources/css/app.css')
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- CSS Global -->
     <style>
@@ -96,11 +97,20 @@
                     year: 'numeric'
                 };
 
-                const datePart = now.toLocaleDateString('en-US', options);
-                const timePart = now.toLocaleTimeString('en-US', {
+                const datePart = now.toLocaleDateString('id-ID', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    timeZone: 'Asia/Jakarta'
+                });
+
+                const timePart = now.toLocaleTimeString('id-ID', {
                     hour: '2-digit',
                     minute: '2-digit',
-                    second: '2-digit'
+                    second: '2-digit',
+                    hour12: true,
+                    timeZone: 'Asia/Jakarta'
                 });
 
                 dateSpan.textContent = `${datePart}, ${timePart}`;

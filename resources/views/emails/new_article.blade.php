@@ -8,7 +8,7 @@
 
     ## 📌 {{ $article->title }}
 
-    {!! \Illuminate\Support\Str::limit(strip_tags($article->content), 200) !!}...
+    {!! \Illuminate\Support\Str::limit(strip_tags($article->content), 100) !!}...
 
     @component('mail::button', ['url' => url('/artikel/' . $article->id)])
         Baca Artikel

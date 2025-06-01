@@ -35,6 +35,7 @@ class ArticleResource extends Resource
     protected static ?string $navigationLabel = 'Artikel';
     protected static ?string $navigationGroup = 'Manajemen Berita';
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $pluralLabel = 'Daftar Artikel';
     protected static ?int $navigationSort = 3;
 
     public static function form(Forms\Form $form): Forms\Form

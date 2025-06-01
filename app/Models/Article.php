@@ -38,4 +38,11 @@ class Article extends Model
     protected $casts = [
         'published_at' => 'datetime',
     ];
+
+    public function getThumbnailUrlAttribute()
+    {
+        return $this->thumbnail && file_exists(public_path('storage/' . $this->thumbnail))
+            ? asset('storage/' . $this->thumbnail)
+            : asset('images/default.jpg');
+    }
 }

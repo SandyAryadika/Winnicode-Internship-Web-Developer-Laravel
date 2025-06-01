@@ -26,8 +26,9 @@ class AuthorResource extends Resource
     protected static ?string $model = Author::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
-    protected static ?string $navigationGroup = 'Manajemen Penggua';
+    protected static ?string $navigationGroup = 'Manajemen Pengguna';
     protected static ?string $navigationLabel = 'Penulis';
+    protected static ?string $pluralLabel = 'Daftar Pengguna';
     protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form

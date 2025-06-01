@@ -16,8 +16,11 @@ class Author extends Model
     }
     public function getPhotoUrlAttribute()
     {
-        return $this->photo ? asset('storage/' . $this->photo) : asset('images/default-avatar.png');
+        return $this->photo && file_exists(public_path('storage/' . $this->photo))
+            ? asset('storage/' . $this->photo)
+            : asset('images/default-avatar.png');
     }
+
     public function getArticleCountAttribute()
     {
         return $this->articles()->count();
