@@ -4,15 +4,17 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 use App\Models\Article;
+use Illuminate\Support\Str;
 
 class NewArticleNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public Article $article;
+    public $article;
+    public $id;
 
     /**
      * Create a new notification instance.
@@ -20,6 +22,7 @@ class NewArticleNotification extends Notification implements ShouldQueue
     public function __construct(Article $article)
     {
         $this->article = $article;
+        $this->id = (string) Str::uuid();
     }
 
     /**
@@ -42,7 +45,7 @@ class NewArticleNotification extends Notification implements ShouldQueue
             ->greeting('Hai!')
             ->line('Ada artikel baru yang baru saja dipublikasikan:')
             ->line('📰 Judul: ' . $this->article->title)
-            ->action('Baca Sekarang', url('/articles/' . $this->article->slug))
+            ->action('Baca Sekarang', url('/articles/' . $this->article->id))
             ->line('Terima kasih telah mengikuti Winnicode.');
     }
 

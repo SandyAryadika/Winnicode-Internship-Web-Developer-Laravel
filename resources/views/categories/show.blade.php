@@ -38,12 +38,24 @@
                                         {{ \Illuminate\Support\Str::limit(strip_tags($article->content), 80) }}
                                     </div>
 
-                                    @if ($article->published_at)
-                                        <div class="text-xs text-gray-400">
-                                            <span>{{ \Carbon\Carbon::parse($article->published_at)->format('d/m/Y') }}</span>
+                                    <div class="flex items-center justify-between text-xs text-gray-400 mb-2">
+                                        <div>
+                                            {{ \Carbon\Carbon::parse($article->published_at)->format('d/m/Y') }}
                                         </div>
-                                    @endif
 
+                                        <div class="flex gap-4 items-center text-gray-500">
+                                            <span class="flex items-center gap-1">
+                                                <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views"
+                                                    class="w-4 h-4">
+                                                {{ number_format($article->views) }}
+                                            </span>
+                                            <span class="flex items-center gap-1">
+                                                <img src="{{ asset('icons/commentdark.png') }}" alt="Comments"
+                                                    class="w-4 h-4">
+                                                {{ $article->comments_count ?? 0 }}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </a>

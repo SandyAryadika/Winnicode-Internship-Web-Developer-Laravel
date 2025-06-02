@@ -24,7 +24,7 @@ class SearchController extends Controller
                     });
             })
             ->latest()
-            ->paginate(10);
+            ->paginate(12);
 
         $results->appends(['q' => $query]);
 

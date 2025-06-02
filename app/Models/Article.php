@@ -35,6 +35,11 @@ class Article extends Model
         return $this->belongsTo(Author::class, 'author_id');
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     protected $casts = [
         'published_at' => 'datetime',
     ];

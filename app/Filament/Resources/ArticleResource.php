@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Mail;
 use Filament\Forms\Components\RichEditor;
 use Closure;
 use Filament\Forms\Get;
+use Filament\Tables\Actions\Action;
 
 class ArticleResource extends Resource
 {
@@ -260,6 +261,11 @@ class ArticleResource extends Resource
                         Filament::auth()->user()->hasRole('admin') ||
                             Filament::auth()->user()->id === optional($record->author)->user_id
                     ),
+
+                Action::make('Lihat Komentar')
+                    ->url(fn($record) => CommentResource::getUrl() . '?tableFilters[article_id][value]=' . $record->id)
+                    ->label('Komentar')
+                    ->visible(fn() => Filament::auth()->user()->hasRole('admin')),
             ])
             ->filters([
                 //

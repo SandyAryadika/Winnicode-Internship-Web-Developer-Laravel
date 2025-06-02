@@ -16,6 +16,8 @@ class CategoryController extends Controller
         $articles = Article::with(['author', 'category'])
             ->where('category_id', $id)
             ->where('status', 'published')
+            ->with(['author'])
+            ->withCount('comments')
             ->whereNotNull('published_at')
             ->orderByDesc('published_at')
             ->paginate(12);

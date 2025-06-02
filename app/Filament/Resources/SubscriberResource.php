@@ -73,4 +73,14 @@ class SubscriberResource extends Resource
             'edit' => Pages\EditSubscriber::route('/{record}/edit'),
         ];
     }
+
+    public static function canAccess(): bool
+    {
+        return auth()->user()?->hasRole('admin');
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasRole('admin');
+    }
 }

@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', $article->title . ' - Winnicode')
+
 @include('partials.header')
 @include('partials.navbar')
 
@@ -25,8 +27,6 @@
         <article class="prose prose-lg max-w-none text-justify mb-12 ">
             {!! modifyArticleContent($article->content) !!}
         </article>
-
-        @include('partials.newsletter')
 
         <div class="mt-8 border-t pt-10">
             <h2 class="text-6xl font-semibold mb-4 text-[#252525] font-birthstone">Bacaan lainnya ></h2>
@@ -60,24 +60,30 @@
         </div>
 
         {{-- Komentar --}}
-        <div class="mt-16 border-t pt-10">
-            <h2 class="text-2xl font-semibold mb-4 text-[#252525]">Komentar</h2>
-            <div id="disqus_thread"></div>
-            <script>
-                var disqus_config = function() {
-                    this.page.url = "{{ Request::url() }}";
-                    this.page.identifier = "article-{{ $article->id }}";
-                };
-                (function() {
-                    var d = document,
-                        s = d.createElement('script');
-                    s.src = 'https://YOUR-DISQUS-SHORTNAME.disqus.com/embed.js';
-                    s.setAttribute('data-timestamp', +new Date());
-                    (d.head || d.body).appendChild(s);
-                })();
-            </script>
+        <div class="mt-6 border-t pt-10">
+            <h2 class="text-6xl font-semibold font-birthstone mb-4 text-[#252525]">Komentar ></h2>
+
+            @foreach ($article->comments as $comment)
+                <div class="mb-4 border-b pb-2">
+                    <p class="font-semibold text-[#252525]">{{ $comment->name }}</p>
+                    <p class="text-sm text-gray-600">{{ $comment->created_at->diffForHumans() }}</p>
+                    <p class="mt-2">{{ $comment->content }}</p>
+                </div>
+            @endforeach
+
+            <form method="POST" action="{{ route('comments.store', $article->id) }}" class="mt-6 space-y-4">
+                @csrf
+                <input type="text" name="name" placeholder="Nama Anda" required
+                    class="w-full border px-4 py-2 rounded">
+                <input type="email" name="email" placeholder="Email (opsional)" class="w-full border px-4 py-2 rounded">
+                <textarea name="content" placeholder="Tulis komentar..." required class="w-full border px-4 py-2 rounded"></textarea>
+                <button type="submit"
+                    class="bg-blue-400 text-white px-6 py-2 rounded border border-gray-300 shadow-md hover:shadow-lg transition">
+                    Kirim Komentar
+                </button>
+            </form>
         </div>
     </section>
-
+    @include('partials.newsletter')
     @include('partials.footer')
 @endsection

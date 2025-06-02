@@ -15,6 +15,10 @@ class AuthorController extends Controller
             $query->whereNotNull('published_at');
         }])->findOrFail($id);
 
+        $author = Author::with(['articles' => function ($query) {
+            $query->withCount('comments');
+        }])->findOrFail($id);
+
         $articles = Article::where('author_id', $author->id)
             ->whereNotNull('published_at')
             ->orderByDesc('published_at')

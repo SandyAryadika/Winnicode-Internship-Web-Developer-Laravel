@@ -5,7 +5,7 @@ namespace App\Notifications;
 use App\Models\Subscriber;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
 
@@ -13,7 +13,7 @@ class NewSubscriberNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public Subscriber $subscriber;
+    public $subscriber;
 
     /**
      * Create a new notification instance.
@@ -39,7 +39,7 @@ class NewSubscriberNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Pelanggan Baru Newsletter')
+            ->subject('Subscriber Baru di Winnicode')
             ->greeting('Halo Admin,')
             ->line('Ada pelanggan baru yang mendaftar ke newsletter.')
             ->line('Email: ' . $this->subscriber->email)

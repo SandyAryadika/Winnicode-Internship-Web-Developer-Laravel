@@ -15,6 +15,7 @@ class LandingController extends Controller
             ->where('status', 'published')
             ->where('is_hot', true)
             ->orderByDesc('published_at')
+            ->withCount('comments')
             ->take(6)
             ->get();
 
@@ -22,6 +23,7 @@ class LandingController extends Controller
             ->where('status', 'published')
             ->where('is_headline', true)
             ->orderByDesc('published_at')
+            ->withCount('comments')
             ->take(6)
             ->get();
 
@@ -29,12 +31,14 @@ class LandingController extends Controller
             ->where('status', 'published')
             ->where('is_featured', true)
             ->orderByDesc('published_at')
+            ->withCount('comments')
             ->take(5)
             ->get();
 
         $editorChoiceArticles = Article::with('author')
             ->where('is_editor_choice', true)
             ->latest()
+            ->withCount('comments')
             ->take(6)
             ->get();
 

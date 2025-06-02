@@ -42,12 +42,27 @@
                     class="group p-2 border rounded-md hover:shadow-lg transition">
                     <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
                         alt="Sub Sorotan" class="w-full h-36 object-cover mb-2 rounded-md">
+
                     <h4 class="text-sm font-semibold leading-snug line-clamp-2">
                         {{ Str::limit($item->title, 70) }}
                     </h4>
-                    <div class="text-xs text-gray-500 mt-1">
-                        {{ $item->category->name ?? 'Tanpa Kategori' }} |
-                        {{ $item->published_at->format('d/m/Y') }}
+
+                    <div class="flex justify-between items-center text-xs text-gray-500 mt-1">
+                        <span>
+                            {{ $item->category->name ?? 'Tanpa Kategori' }} |
+                            {{ $item->published_at->format('d/m/Y') }}
+                        </span>
+
+                        <span class="flex gap-2">
+                            <span class="flex items-center gap-1">
+                                <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views" class="w-4 h-4">
+                                {{ number_format($item->views) }}
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <img src="{{ asset('icons/commentdark.png') }}" alt="Comments" class="w-4 h-4">
+                                {{ $item->comments_count ?? 0 }}
+                            </span>
+                        </span>
                     </div>
                 </a>
             @endforeach

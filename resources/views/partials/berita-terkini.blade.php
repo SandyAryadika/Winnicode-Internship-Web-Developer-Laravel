@@ -69,7 +69,6 @@
                         <span>|</span>
                         <span>{{ \Carbon\Carbon::parse($article->published_at)->format('d/m/Y') }}</span>
                     </div>
-
                     <div class="flex gap-4 items-center">
                         <span class="flex items-center gap-1">
                             <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views" class="w-4 h-4">

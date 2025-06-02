@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use App\Models\Subscriber;
+use Illuminate\Support\Facades\Notification;
 use App\Notifications\NewArticleNotification;
 
 class ArticleController extends Controller
 {
     public function show($id)
     {
-        $article = Article::with(['category', 'author'])->findOrFail($id);
+        $article = Article::with(['category', 'author'])
+            ->withCount('comments')
+            ->findOrFail($id);
 
         $relatedPosts = Article::where('id', '!=', $article->id)
             ->where('category_id', $article->category_id)
@@ -42,7 +45,8 @@ class ArticleController extends Controller
 
         $subscribers = Subscriber::all();
         foreach ($subscribers as $subscriber) {
-            Notification::route('mail', $subscriber->email)->notify(new NewArticleNotification($article));
+            Notification::route('mail', 'admin@example.com')
+                ->notify(new NewArticleNotification($article));
         }
 
         return view('articles.show', compact('article', 'relatedPosts', 'sameAuthor', 'sameCategory', 'editorChoice'));

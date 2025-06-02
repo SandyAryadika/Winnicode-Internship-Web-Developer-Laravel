@@ -38,15 +38,31 @@
                         <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
                             alt="{{ $item->title }}"
                             class="w-24 h-24 object-cover rounded-md border group-hover:scale-105 transition duration-300">
-                        <div class="flex flex-col justify-between h-full">
+
+                        <div class="flex flex-col justify-between h-full w-full">
                             <h4
                                 class="text-base font-semibold leading-snug line-clamp-2 group-hover:text-[#FF66C4] transition">
                                 {{ \Illuminate\Support\Str::limit($item->title, 150, '...') }}
                             </h4>
-                            <span class="text-xs text-gray-500 mt-1">
-                                {{ $item->category->name ?? '-' }} |
-                                {{ \Carbon\Carbon::parse($item->published_at)->format('d/m/Y') }}
-                            </span>
+
+                            <div class="flex justify-between items-center mt-2 text-xs text-gray-500">
+                                <span>
+                                    {{ $item->category->name ?? '-' }} |
+                                    {{ \Carbon\Carbon::parse($item->published_at)->format('d/m/Y') }}
+                                </span>
+
+                                <div class="flex gap-3">
+                                    <span class="flex items-center gap-1">
+                                        <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views"
+                                            class="w-4 h-4">
+                                        {{ number_format($item->views) }}
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <img src="{{ asset('icons/commentdark.png') }}" alt="Comments" class="w-4 h-4">
+                                        {{ $item->comments_count ?? 0 }}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </a>
                 @endforeach

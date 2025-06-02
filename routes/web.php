@@ -7,6 +7,7 @@ use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\CommentController;
 
 Route::get('/', [LandingController::class, 'index'])->name('landing');
 Route::get('/search', [SearchController::class, 'search'])->name('search');
@@ -14,3 +15,4 @@ Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('categ
 Route::get('/artikel/{id}', [ArticleController::class, 'show'])->name('articles.show');
 Route::get('/authors/{id}', [AuthorController::class, 'show'])->name('authors.show');
 Route::post('/subscribe', [SubscriberController::class, 'store'])->name('subscriber.store');
+Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->name('comments.store');

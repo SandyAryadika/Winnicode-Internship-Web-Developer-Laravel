@@ -9,12 +9,27 @@
                 class="group p-2 border rounded-md hover:shadow-lg transition">
                 <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
                     alt="{{ $item->title }}" class="w-full h-48 object-cover mb-2 rounded-md" />
+
                 <h4 class="font-semibold leading-snug line-clamp-2">
                     {{ Str::limit($item->title, 80) }}
                 </h4>
-                <div class="text-sm text-gray-500 mt-1">
-                    {{ $item->category->name ?? '-' }} |
-                    {{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}
+
+                <div class="flex justify-between items-center text-sm text-gray-600 mt-1">
+                    <span>
+                        {{ $item->category->name ?? '-' }} |
+                        {{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}
+                    </span>
+
+                    <span class="flex gap-3">
+                        <span class="flex items-center gap-1">
+                            <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views" class="w-4 h-4">
+                            {{ number_format($item->views) }}
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <img src="{{ asset('icons/commentdark.png') }}" alt="Comments" class="w-4 h-4">
+                            {{ $item->comments_count ?? 0 }}
+                        </span>
+                    </span>
                 </div>
             </a>
         @empty

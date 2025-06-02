@@ -21,6 +21,12 @@
                         <p class="text-medium text-[#252525] mt-3 italic">{{ $author->bio ?? 'Belum ada bio.' }}</p>
                         <p class="text-medium text-gray-800 mt-3">Bergabung sejak
                             {{ $author->created_at->translatedFormat('F Y') }}</p>
+                        <p class="text-medium text-[#252525] mt-3">
+                            Total views: <span
+                                class="font-semibold">{{ number_format($author->articles->sum('views')) }}</span> |
+                            Total komentar: <span
+                                class="font-semibold">{{ $author->articles->sum('comments_count') }}</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -37,12 +43,12 @@
                             <h4 class="text-base font-semibold text-gray-800 mb-1">
                                 {{ Str::limit($article->title, 50) }}
                             </h4>
-                            <p class="text-xs text-gray-500 mb-1">
+                            <p class="text-sm text-gray-600 mb-1">
+                                {{ Str::limit(strip_tags($article->content), 97) }}
+                            </p>
+                            <p class="text-xs text-gray-500">
                                 {{ $article->category->name ?? '-' }} |
                                 {{ $article->published_at ? $article->published_at->format('d M Y') : 'Belum dipublikasikan' }}
-                            </p>
-                            <p class="text-sm text-gray-600">
-                                {{ Str::limit(strip_tags($article->content), 97) }}
                             </p>
                         </div>
                     </a>
