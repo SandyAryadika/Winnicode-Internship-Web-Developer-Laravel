@@ -2,9 +2,13 @@
 
 @section('title', $author->name . ' - Profil Penulis | Winnicode')
 
-@include('partials.header')
-@include('partials.navbar')
+@section('head')
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+@endsection
+
 @section('content')
+    @include('partials.header')
+    @include('partials.navbar')
     <section class="py-10 px-6 max-w-screen-xl mx-auto">
         <h2 class="text-6xl font-semibold font-birthstone mb-6 pl-6">Profile Penulis <span class="text-[#FF66C4]">&gt;</span>
         </h2>
@@ -34,29 +38,27 @@
 
         <div class="border-t border-gray-300 pt-10">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                @forelse ($articles as $article)
+                @foreach ($articles as $article)
                     <a href="{{ route('articles.show', $article->id) }}"
-                        class="block bg-white overflow-hidden border shadow-sm rounded-md transition-all duration-300 hover:shadow-lg hover:scale-[1.01] hover:ring-2 hover:ring-blue-200">
+                        class="flex flex-col bg-white overflow-hidden border shadow-sm rounded-md transition-all duration-300 hover:shadow-lg hover:scale-[1.01] hover:ring-2 hover:ring-blue-200 h-full">
                         <img src="{{ $article->thumbnail ? asset('storage/' . $article->thumbnail) : asset('images/default.jpg') }}"
                             alt="{{ $article->title }}" class="w-full h-40 object-cover">
-                        <div class="p-4">
+                        <div class="p-4 flex flex-col flex-grow">
                             <h4 class="text-base font-semibold text-gray-800 mb-1">
                                 {{ Str::limit($article->title, 50) }}
                             </h4>
+                            <p class="text-xs text-gray-500 mb-1">
+                                {{ $article->category->name ?? '-' }}
+                            </p>
                             <p class="text-sm text-gray-600 mb-1">
                                 {{ Str::limit(strip_tags($article->content), 97) }}
                             </p>
-                            <p class="text-xs text-gray-500">
-                                {{ $article->category->name ?? '-' }} |
+                            <p class="text-xs text-gray-500 mt-auto">
                                 {{ $article->published_at ? $article->published_at->format('d M Y') : 'Belum dipublikasikan' }}
                             </p>
                         </div>
                     </a>
-                @empty
-                    <div class="col-span-3 text-center py-8">
-                        <p class="text-gray-500">Belum ada artikel yang ditulis oleh kontributor ini.</p>
-                    </div>
-                @endforelse
+                @endforeach
 
                 <div class="mt-8">
                     {{ $articles->links('pagination::tailwind') }}

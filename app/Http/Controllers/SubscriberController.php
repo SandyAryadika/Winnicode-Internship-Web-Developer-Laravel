@@ -27,12 +27,11 @@ class SubscriberController extends Controller
             return redirect()->back()->with('error', 'Email ini sudah terdaftar untuk newsletter.');
         }
 
-        // ⬇️ Simpan subscriber dan kirim notifikasi
         $subscriber = Subscriber::create([
             'email' => $request->email,
         ]);
 
-        $adminEmail = 'winnicode@news.com';
+        $adminEmail = ['arizzhi@gmail.com', 'winnicode@gmail.com'];
         Notification::route('mail', $adminEmail)->notify(new NewSubscriberNotification($subscriber));
 
         return redirect()->back()->with('success', 'Terima kasih telah berlangganan!');

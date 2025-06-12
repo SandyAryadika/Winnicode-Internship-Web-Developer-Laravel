@@ -6,7 +6,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @forelse ($editorChoiceArticles as $item)
             <a href="{{ route('articles.show', $item->id) }}"
-                class="group p-2 border rounded-md hover:shadow-lg transition">
+                class="group p-2 border rounded-md hover:shadow-lg transition flex flex-col">
                 <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
                     alt="{{ $item->title }}" class="w-full h-48 object-cover mb-2 rounded-md" />
 
@@ -14,7 +14,8 @@
                     {{ Str::limit($item->title, 80) }}
                 </h4>
 
-                <div class="flex justify-between items-center text-sm text-gray-600 mt-1">
+                <!-- Meta info menempel di bawah -->
+                <div class="flex justify-between items-center text-sm text-gray-600 mt-auto">
                     <span>
                         {{ $item->category->name ?? '-' }} |
                         {{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}

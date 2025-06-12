@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@yield('title', 'Winnicode')</title>
 
-    <link rel="icon" href="{{ asset('images/circle-winnicode.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('images/circle-winnicode.ico') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Birthstone&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -27,7 +27,11 @@
             display: none;
         }
 
-        .scrollbar-hide {
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
@@ -50,10 +54,10 @@
     </style>
 
     @stack('styles')
+    @yield('head')
 </head>
 
 <body>
-
     @yield('content')
 
     @php
@@ -69,7 +73,7 @@
     @endphp
 
     @if ($type)
-        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show" x-transition.duration.300ms
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 10000)" x-show="show" x-transition.duration.300ms
             class="fixed top-5 right-5 z-50 flex items-start w-full max-w-sm p-4 rounded-lg shadow-lg {{ $toastColors[$type] }}"
             role="alert">
             <span class="flex-1 text-sm font-medium">
@@ -156,6 +160,16 @@
             currentSlide = (currentSlide + 1) % 3;
             showSlide(currentSlide);
         }, 7000);
+
+        // related-cards
+        function scrollCarousel(id, direction) {
+            const container = document.getElementById(id);
+            const scrollAmount = 320;
+            container.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
     </script>
 
     @stack('scripts')

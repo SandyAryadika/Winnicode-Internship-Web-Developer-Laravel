@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Subscriber;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\NewArticleNotification;
@@ -16,38 +17,47 @@ class ArticleController extends Controller
             ->withCount('comments')
             ->findOrFail($id);
 
-        $relatedPosts = Article::where('id', '!=', $article->id)
-            ->where('category_id', $article->category_id)
-            ->latest()
-            ->take(4)
-            ->get();
+        $relatedPosts = Cache::remember("article_{$id}_related", now()->addMinutes(30), function () use ($article) {
+            return Article::where('id', '!=', $article->id)
+                ->where('category_id', $article->category_id)
+                ->latest()
+                ->take(4)
+                ->get();
+        });
 
-        $sameAuthor = Article::where('author_id', $article->author_id)
-            ->where('id', '!=', $article->id)
-            ->where('status', 'published')
-            ->latest()
-            ->take(3)
-            ->get();
 
-        $sameCategory = Article::where('category_id', $article->category_id)
-            ->where('id', '!=', $article->id)
-            ->where('status', 'published')
-            ->latest()
-            ->take(3)
-            ->get();
+        $sameAuthor = Cache::remember("article_{$id}_same_author", now()->addMinutes(30), function () use ($article) {
+            return Article::where('author_id', $article->author_id)
+                ->where('id', '!=', $article->id)
+                ->where('status', 'published')
+                ->latest()
+                ->take(5)
+                ->get();
+        });
 
-        $editorChoice = Article::where('is_editor_choice', true)
-            ->where('id', '!=', $article->id)
-            ->where('status', 'published')
-            ->latest()
-            ->take(3)
-            ->get();
+        $sameCategory = Cache::remember("article_{$id}_same_category", now()->addMinutes(30), function () use ($article) {
+            return Article::where('category_id', $article->category_id)
+                ->where('id', '!=', $article->id)
+                ->where('status', 'published')
+                ->latest()
+                ->take(5)
+                ->get();
+        });
 
-        $subscribers = Subscriber::all();
-        foreach ($subscribers as $subscriber) {
-            Notification::route('mail', 'admin@example.com')
-                ->notify(new NewArticleNotification($article));
-        }
+        $editorChoice = Cache::remember("article_{$id}_editor_choice", now()->addMinutes(30), function () use ($article) {
+            return Article::where('is_editor_choice', true)
+                ->where('id', '!=', $article->id)
+                ->where('status', 'published')
+                ->latest()
+                ->take(5)
+                ->get();
+        });
+
+        // $subscribers = Subscriber::all();
+        // foreach ($subscribers as $subscriber) {
+        //     Notification::route('mail', 'admin@example.com')
+        //         ->notify(new NewArticleNotification($article));
+        // }
 
         return view('articles.show', compact('article', 'relatedPosts', 'sameAuthor', 'sameCategory', 'editorChoice'));
     }

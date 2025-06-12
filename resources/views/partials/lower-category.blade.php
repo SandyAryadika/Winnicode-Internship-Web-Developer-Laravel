@@ -11,7 +11,7 @@
             @if ($internasionalCategory)
                 <a href="{{ route('categories.show', $kategoriAcak->id) }}"
                     class="flex justify-between items-center mb-4 group">
-                    <h2 class="text-2xl font-semibold text-black group-hover:underline">
+                    <h2 class="text-5xl font-semibold font-birthstone tracking-wide text-black group-hover:underline">
                         {{ $kategoriAcak->name }}
                     </h2>
                     <span class="text-blue-600 text-sm group-hover:underline">&rsaquo;</span>
@@ -31,7 +31,7 @@
                         class="rounded-md w-48 h-32 object-cover group-hover:brightness-90 duration-300">
                     <div class="w-full">
                         <div class="flex items-center space-x-1 text-sm text-gray-500 mb-1">
-                            <span>{{ $utama->author->name ?? 'Redaksi' }}</span>
+                            <span>{{ $utama->author->name ?? 'Tim Winnicode' }}</span>
                         </div>
                         <h3 class="font-semibold leading-snug line-clamp-2 text-black group-hover:underline transition">
                             {{ $utama->title }}
@@ -64,7 +64,7 @@
                 @forelse ($lainnya->take(3) as $item)
                     <a href="{{ route('articles.show', $item->id) }}" class="block rounded-md p-2 transition group">
                         <div class="text-sm text-gray-500 mb-1">
-                            <span class="font-medium text-gray-500">{{ $item->author->name ?? 'Redaksi' }}</span>
+                            <span class="font-medium text-gray-500">{{ $item->author->name ?? 'Tim Winnicode' }}</span>
                         </div>
                         <p
                             class="text-sm font-medium leading-snug text-black transition duration-150 group-hover:underline">
@@ -94,7 +94,7 @@
 
         <div>
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-semibold text-teal-700">Rekomendasi</h2>
+                <h2 class="text-5xl font-birthstone tracking-wide font-semibold text-teal-700">Rekomendasi</h2>
                 <span class="text-blue-600 text-sm cursor-pointer"></span>
             </div>
 

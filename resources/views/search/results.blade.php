@@ -2,9 +2,13 @@
 
 @section('title', 'Hasil Pencarian Artikel & Penulis | Winnicode')
 
-@include('partials.header')
-@include('partials.navbar')
+@section('head')
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+@endsection
+
 @section('content')
+    @include('partials.header')
+    @include('partials.navbar')
     <section class="px-4 sm:px-6 lg:px-20 py-8 min-h-screen">
         <h2 class="text-2xl font-semibold mb-6 text-gray-800 flex items-center gap-2">
             <img src="{{ asset('images/result-search.png') }}" alt="Search Icon" class="w-6 h-6">

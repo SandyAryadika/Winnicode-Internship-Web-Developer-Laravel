@@ -23,8 +23,9 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
     protected static ?string $navigationLabel = 'Role';
     protected static ?string $navigationGroup = 'Manajemen Pengguna';
-    protected static ?string $navigationIcon = 'heroicon-o-user';
+    protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
     protected static ?string $pluralLabel = 'Daftar Role';
+    protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
     {
@@ -91,15 +92,14 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->color('info')
-                    ->visible(fn() => auth()->user()->hasRole('admin')),
+                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
                     ->visible(fn() => auth()->user()->hasRole('admin')),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make()
-                    ->visible(fn() => auth()->user()->hasRole('admin')),
+                    ->label('Hapus yang dipilih')
+                    ->visible(fn() => auth()->user()->hasRole('admin'))
             ])
             ->striped();
     }
@@ -130,8 +130,9 @@ class UserResource extends Resource
 
     public static function canDelete(?Model $record): bool
     {
-        return auth()->user()?->hasRole('admin') && auth()->id() !== $record?->id;
+        return auth()->user()?->hasRole('admin');
     }
+
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->with('roles');

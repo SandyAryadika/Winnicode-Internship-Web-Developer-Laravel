@@ -41,6 +41,18 @@ class AppServiceProvider extends ServiceProvider
                 ->get());
         });
 
+        View::composer('partials.footer', function ($view) {
+            $categories = Category::whereIn('name', [
+                'Politik',
+                'Internasional',
+                'Hukum & Kriminal',
+                'Ekonomi & Bisnis',
+                'Teknologi',
+            ])->get();
+
+            $view->with('quickCategories', $categories);
+        });
+
         setlocale(LC_TIME, 'id_ID.UTF-8');
         Carbon::setLocale('id');
     }

@@ -2,10 +2,13 @@
 
 @section('title', $category->name . ' - Kategori Artikel | Winnicode')
 
-@include('partials.header')
-@include('partials.navbar')
+@section('head')
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+@endsection
 
 @section('content')
+    @include('partials.header')
+    @include('partials.navbar')
     <div class="container mx-auto px-4 py-8 flex gap-6">
         <div class="w-full lg:w-4/5">
             <div class="text-2xl font-bold mb-6">Kategori: {{ $category->name }}</div>
@@ -90,21 +93,40 @@
                                                 <div class="p-4 flex flex-col justify-between flex-1">
                                                     <div
                                                         class="text-base font-semibold text-black group-hover:underline mb-1">
-                                                        {{ \Illuminate\Support\Str::limit($relArticle->title, 60) }}
+                                                        {{ \Illuminate\Support\Str::limit($relArticle->title, 40) }}
                                                     </div>
+
                                                     @if ($relArticle->author)
                                                         <div class="text-sm text-gray-500 mb-2">
                                                             Oleh: {{ $relArticle->author->name }}
                                                         </div>
                                                     @endif
+
                                                     <div class="text-sm text-gray-600 mb-3">
                                                         {{ \Illuminate\Support\Str::limit(strip_tags($relArticle->content), 80) }}
                                                     </div>
-                                                    @if ($article->published_at)
-                                                        <div class="text-xs text-gray-400 mt-1">
-                                                            <span>{{ \Carbon\Carbon::parse($article->published_at)->format('d/m/Y') }}</span>
+
+                                                    <div
+                                                        class="flex justify-between items-center text-xs text-gray-400 mt-auto">
+                                                        @if ($relArticle->published_at)
+                                                            <span>
+                                                                {{ \Carbon\Carbon::parse($relArticle->published_at)->format('d/m/Y') }}
+                                                            </span>
+                                                        @endif
+
+                                                        <div class="flex gap-4">
+                                                            <span class="flex items-center gap-1">
+                                                                <img src="{{ asset('icons/visibilitydark.png') }}"
+                                                                    alt="Views" class="w-4 h-4">
+                                                                {{ number_format($relArticle->views) }}
+                                                            </span>
+                                                            <span class="flex items-center gap-1">
+                                                                <img src="{{ asset('icons/commentdark.png') }}"
+                                                                    alt="Comments" class="w-4 h-4">
+                                                                {{ $relArticle->comments_count ?? 0 }}
+                                                            </span>
                                                         </div>
-                                                    @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </a>
@@ -131,7 +153,7 @@
                     ])
                         ->has('articles')
                         ->inRandomOrder()
-                        ->limit(4)
+                        ->limit(5)
                         ->get();
                 @endphp
 
@@ -147,7 +169,7 @@
                             {{ \Illuminate\Support\Str::limit($otherAuthor->bio, 80) }}
                         </div>
                         <div class="text-xs text-gray-500 text-center mt-2">
-                            {{ $otherAuthor->articles_count }} artikel dipublikasikan
+                            {{ $otherAuthor->articles_count }} artikel
                         </div>
                     </a>
                 @endforeach

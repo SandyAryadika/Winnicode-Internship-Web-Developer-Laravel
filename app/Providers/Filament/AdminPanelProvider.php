@@ -25,6 +25,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Widgets\BarChartWidget;
+use App\Filament\Resources\AdminResource\Widgets\RecentSubscribers;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -50,6 +51,7 @@ class AdminPanelProvider extends PanelProvider
                 ArticleStats::class,
                 ArticlesChart::class,
                 TopAuthorsWidget::class,
+                RecentSubscribers::class,
             ])
             ->middleware([
                 EncryptCookies::class,

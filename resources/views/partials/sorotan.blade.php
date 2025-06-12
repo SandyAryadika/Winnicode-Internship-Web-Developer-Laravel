@@ -4,15 +4,18 @@
 
     @if ($artikelSorotan->isNotEmpty())
         @php $utama = $artikelSorotan->first(); @endphp
-        <a href="{{ route('articles.show', $utama->id) }}" class="flex flex-col md:flex-row gap-6 items-start group">
-            <div class="basis-full md:basis-1/3 space-y-2">
-                <h3 class="text-2xl font-bold group-hover:underline leading-snug">
-                    {{ Str::limit($utama->title, 150) }}
-                </h3>
-                <p class="text-gray-600 text-sm py-8">
-                    {{ Str::limit($utama->excerpt ?? strip_tags($utama->content), 600) }}
-                </p>
-                <div class="text-sm text-gray-500 flex flex-col sm:flex-row sm:justify-between gap-2 mt-2">
+        <a href="{{ route('articles.show', $utama->id) }}" class="flex flex-col md:flex-row gap-6 group h-full">
+            <div class="basis-full md:basis-1/3 flex flex-col justify-between h-full space-y-2">
+                <div>
+                    <h3 class="text-2xl font-bold group-hover:underline leading-snug">
+                        {{ Str::limit($utama->title, 150) }}
+                    </h3>
+                    <p class="text-gray-600 text-sm py-6">
+                        {{ Str::limit($utama->excerpt ?? strip_tags($utama->content), 600) }}
+                    </p>
+                </div>
+
+                <div class="text-sm text-gray-500 flex flex-col sm:flex-row sm:justify-between gap-2 mt-auto">
                     <div class="flex gap-2 items-center">
                         <span>{{ $utama->category->name ?? 'Tanpa Kategori' }}</span> |
                         <span>{{ $utama->published_at->format('d/m/Y') }}</span>
@@ -29,6 +32,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="basis-full md:basis-2/3">
                 <img src="{{ $utama->thumbnail ? asset('storage/' . $utama->thumbnail) : asset('images/default.jpg') }}"
                     alt="Gambar Sorotan"

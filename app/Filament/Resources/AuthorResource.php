@@ -29,7 +29,7 @@ class AuthorResource extends Resource
     protected static ?string $navigationGroup = 'Manajemen Pengguna';
     protected static ?string $navigationLabel = 'Penulis';
     protected static ?string $pluralLabel = 'Daftar Pengguna';
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
     {

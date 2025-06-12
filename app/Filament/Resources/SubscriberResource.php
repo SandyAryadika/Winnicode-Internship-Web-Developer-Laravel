@@ -12,13 +12,15 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
+use Filament\Tables\Actions\Action;
+use App\Exports\SpatieSubscribersExport;
 
 class SubscriberResource extends Resource
 {
     protected static ?string $model = Subscriber::class;
     protected static ?string $navigationIcon = 'heroicon-o-envelope';
-    protected static ?string $navigationLabel = 'Subscribers';
+    protected static ?string $navigationGroup = 'Konten Interaktif';
+    protected static ?string $navigationLabel = 'Subscriber';
     protected static ?string $pluralLabel = 'Daftar Subscriber';
 
     public static function form(Form $form): Form
@@ -28,7 +30,7 @@ class SubscriberResource extends Resource
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
-                    ->disabled(), // Disable agar tidak bisa diubah dari panel
+                    ->disabled(),
                 Forms\Components\DateTimePicker::make('created_at')
                     ->label('Waktu Berlangganan')
                     ->disabled(),
@@ -50,7 +52,14 @@ class SubscriberResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
+            // ->headerActions([
+            //     Action::make('export')
+            //         ->label('Ekspor ke Excel')
+            //         ->icon('heroicon-o-arrow-down-tray')
+            //         ->action(fn() => SpatieSubscribersExport::export()),
+            // ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),

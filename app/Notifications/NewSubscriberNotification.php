@@ -7,20 +7,23 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Str;
 
 
 class NewSubscriberNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $subscriber;
+    public $email;
+    public $id;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(Subscriber $subscriber)
+    public function __construct(string $email)
     {
-        $this->subscriber = $subscriber;
+        $this->email = $email;
+        $this->id = (string) Str::uuid();
     }
 
     /**
@@ -42,7 +45,7 @@ class NewSubscriberNotification extends Notification implements ShouldQueue
             ->subject('Subscriber Baru di Winnicode')
             ->greeting('Halo Admin,')
             ->line('Ada pelanggan baru yang mendaftar ke newsletter.')
-            ->line('Email: ' . $this->subscriber->email)
+            ->line('Email: ' . $this->email)
             ->line('Terima kasih.');
     }
 

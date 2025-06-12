@@ -10,7 +10,10 @@ class ArticlesChart extends LineChartWidget
 {
     protected static ?string $heading = 'Artikel Harian & Bulanan';
     protected static ?int $sort = 4;
-    protected int|string|array $columnSpan = 'full';
+    protected function getMaxHeight(): string | null
+    {
+        return '400px'; // sesuaikan dengan kebutuhan
+    }
 
     protected function getData(): array
     {

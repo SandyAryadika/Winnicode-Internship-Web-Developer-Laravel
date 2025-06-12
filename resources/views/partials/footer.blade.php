@@ -8,11 +8,13 @@
     <div class="space-y-2">
         <h4 class="font-semibold text-lg">Quick Links</h4>
         <ul class="text-sm text-gray-600 space-y-1">
-            <li><a href="/" class="hover:text-[#5271FF]">Beranda</a></li>
-            <li><a href="/berita" class="hover:text-[#5271FF]">Berita</a></li>
-            <li><a href="/kontak" class="hover:text-[#5271FF]">Kontak Kami</a></li>
-            <li><a href="/privasi" class="hover:text-[#5271FF]">Privasi &amp; Policy</a></li>
-            <li><a href="/tentang" class="hover:text-[#5271FF]">Tentang Kami</a></li>
+            @foreach ($quickCategories ?? [] as $category)
+                <li>
+                    <a href="{{ route('categories.show', ['id' => $category->id]) }}" class="hover:text-[#5271FF]">
+                        {{ $category->name }}
+                    </a>
+                </li>
+            @endforeach
         </ul>
     </div>
 
