@@ -22,11 +22,13 @@
                     </div>
                     <div class="flex gap-4 items-center">
                         <span class="flex items-center gap-1">
-                            <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views" class="w-4 h-4">
+                            <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy" alt="Views"
+                                class="w-4 h-4">
                             {{ number_format($utama->views) }}
                         </span>
                         <span class="flex items-center gap-1">
-                            <img src="{{ asset('icons/commentdark.png') }}" alt="Comments" class="w-4 h-4">
+                            <img src="{{ asset('icons/commentdark.png') }}" loading="lazy" alt="Comments"
+                                class="w-4 h-4">
                             {{ $utama->comments_count ?? '0' }}
                         </span>
                     </div>
@@ -35,7 +37,7 @@
 
             <div class="basis-full md:basis-2/3">
                 <img src="{{ $utama->thumbnail ? asset('storage/' . $utama->thumbnail) : asset('images/default.jpg') }}"
-                    alt="Gambar Sorotan"
+                    loading="lazy" alt="Gambar Sorotan"
                     class="w-full h-52 md:h-full object-cover group-hover:brightness-90 rounded-md transition">
             </div>
         </a>
@@ -45,7 +47,7 @@
                 <a href="{{ route('articles.show', $item->id) }}"
                     class="group p-2 border rounded-md hover:shadow-lg transition">
                     <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
-                        alt="Sub Sorotan" class="w-full h-36 object-cover mb-2 rounded-md">
+                        loading="lazy" alt="Sub Sorotan" class="w-full h-36 object-cover mb-2 rounded-md">
 
                     <h4 class="text-sm font-semibold leading-snug line-clamp-2">
                         {{ Str::limit($item->title, 70) }}
@@ -59,11 +61,13 @@
 
                         <span class="flex gap-2">
                             <span class="flex items-center gap-1">
-                                <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views" class="w-4 h-4">
+                                <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy" alt="Views"
+                                    class="w-4 h-4">
                                 {{ number_format($item->views) }}
                             </span>
                             <span class="flex items-center gap-1">
-                                <img src="{{ asset('icons/commentdark.png') }}" alt="Comments" class="w-4 h-4">
+                                <img src="{{ asset('icons/commentdark.png') }}" loading="lazy" alt="Comments"
+                                    class="w-4 h-4">
                                 {{ $item->comments_count ?? 0 }}
                             </span>
                         </span>

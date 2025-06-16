@@ -27,7 +27,7 @@
                 <a href="{{ route('articles.show', $utama->id) }}"
                     class="flex gap-4 mb-4 group rounded-md p-2 transition">
                     <img src="{{ $utama->thumbnail ? asset('storage/' . $utama->thumbnail) : asset('images/default.jpg') }}"
-                        alt="Thumbnail"
+                        loading="lazy" alt="Thumbnail"
                         class="rounded-md w-48 h-32 object-cover group-hover:brightness-90 duration-300">
                     <div class="w-full">
                         <div class="flex items-center space-x-1 text-sm text-gray-500 mb-1">
@@ -41,17 +41,19 @@
                         </p>
                         <div class="flex justify-between items-center mt-1 text-sm text-gray-500">
                             <span>
-                                {{ $utama->published_at ? $utama->published_at->translatedFormat('d F Y') : 'Belum dipublikasikan' }}
+                                {{ $utama->published_at ? $utama->published_at->translatedFormat('d/m/Y') : 'Belum dipublikasikan' }}
                             </span>
                         </div>
                         <div class="flex justify-between items-center mt-1 text-sm text-gray-500">
                             <span class="flex gap-3 items-center">
                                 <span class="flex items-center gap-1">
-                                    <img src="{{ asset('icons/visibilitydark.png') }}" class="w-4 h-4" alt="views">
+                                    <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy" class="w-4 h-4"
+                                        alt="views">
                                     {{ number_format($utama->views) }}
                                 </span>
                                 <span class="flex items-center gap-1">
-                                    <img src="{{ asset('icons/commentdark.png') }}" class="w-4 h-4" alt="comments">
+                                    <img src="{{ asset('icons/commentdark.png') }}" loading="lazy" class="w-4 h-4"
+                                        alt="comments">
                                     {{ $utama->comments_count ?? 0 }}
                                 </span>
                             </span>
@@ -72,15 +74,17 @@
                         </p>
                         <div class="flex justify-between items-center text-sm text-gray-500 mt-1">
                             <span>
-                                {{ $item->published_at ? $item->published_at->translatedFormat('d F Y') : 'Belum dipublikasikan' }}
+                                {{ $item->published_at ? $item->published_at->translatedFormat('d/m/Y') : 'Belum dipublikasikan' }}
                             </span>
                             <span class="flex gap-3 items-center">
                                 <span class="flex items-center gap-1">
-                                    <img src="{{ asset('icons/visibilitydark.png') }}" class="w-4 h-4" alt="views">
+                                    <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy" class="w-4 h-4"
+                                        alt="views">
                                     {{ number_format($item->views) }}
                                 </span>
                                 <span class="flex items-center gap-1">
-                                    <img src="{{ asset('icons/commentdark.png') }}" class="w-4 h-4" alt="comments">
+                                    <img src="{{ asset('icons/commentdark.png') }}" loading="lazy" class="w-4 h-4"
+                                        alt="comments">
                                     {{ $item->comments_count ?? 0 }}
                                 </span>
                             </span>
@@ -116,18 +120,19 @@
                             <div class="flex justify-between items-center mt-1 text-xs text-gray-500">
                                 {{-- Tanggal Publish --}}
                                 <span>
-                                    {{ optional($berita->published_at)->translatedFormat('d F Y') ?? 'Belum dipublikasikan' }}
+                                    {{ optional($berita->published_at)->translatedFormat('d/m/Y') ?? 'Belum dipublikasikan' }}
                                 </span>
 
                                 {{-- Views dan Komentar --}}
                                 <span class="flex items-center gap-3">
                                     <span class="flex items-center gap-1">
-                                        <img src="{{ asset('icons/visibilitydark.png') }}" alt="views"
-                                            class="w-4 h-4">
+                                        <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy"
+                                            alt="views" class="w-4 h-4">
                                         {{ number_format($berita->views) }}
                                     </span>
                                     <span class="flex items-center gap-1">
-                                        <img src="{{ asset('icons/commentdark.png') }}" alt="comments" class="w-4 h-4">
+                                        <img src="{{ asset('icons/commentdark.png') }}" loading="lazy" alt="comments"
+                                            class="w-4 h-4">
                                         {{ $berita->comments_count ?? 0 }}
                                     </span>
                                 </span>
@@ -137,7 +142,7 @@
                         {{-- Thumbnail --}}
                         <a href="{{ route('articles.show', $berita->id) }}">
                             <img src="{{ $berita->thumbnail ? asset('storage/' . $berita->thumbnail) : asset('images/default.jpg') }}"
-                                class="rounded-md w-24 h-20 object-cover" alt="Thumb">
+                                loading="lazy" class="rounded-md w-24 h-20 object-cover" alt="Thumb">
                         </a>
                     </div>
                 @endforeach

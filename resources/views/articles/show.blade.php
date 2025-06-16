@@ -13,7 +13,7 @@
         <div class="flex items-center space-x-6">
             <a href="{{ route('authors.show', $article->author) }}">
                 <img src="{{ $article->author->photo ? asset('storage/' . $article->author->photo) : asset('images/default.jpg') }}"
-                    class="w-14 h-14 rounded-full object-cover" alt="{{ $article->author->name }}">
+                    loading="lazy" class="w-14 h-14 rounded-full object-cover" alt="{{ $article->author->name }}">
             </a>
             <span>By <a href="{{ route('authors.show', $article->author) }}" class="text-blue-600 hover:underline">
                     {{ $article->author->name }}
@@ -31,11 +31,11 @@
         </div>
         <div class="flex items-center gap-4 mt-2 sm:mt-0">
             <span class="flex items-center gap-1">
-                <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views" class="w-4 h-4">
+                <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy" alt="Views" class="w-4 h-4">
                 {{ number_format($article->views) }} Views
             </span>
             <span class="flex items-center gap-1">
-                <img src="{{ asset('icons/commentdark.png') }}" alt="Comments" class="w-4 h-4">
+                <img src="{{ asset('icons/commentdark.png') }}" loading="lazy" alt="Comments" class="w-4 h-4">
                 {{ $article->comments_count ?? 0 }} Comments
             </span>
         </div>
@@ -43,7 +43,7 @@
 
     @if ($article->thumbnail)
         <div class="w-full px-4 md:px-10 lg:px-10 mt-6">
-            <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="{{ $article->title }}"
+            <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="{{ $article->title }}" loading="lazy"
                 class="w-full h-[550px] object-cover shadow-md rounded-md">
         </div>
     @endif

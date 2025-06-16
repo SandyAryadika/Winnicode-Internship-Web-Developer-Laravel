@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\Subscriber;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\NewArticleNotification;
+use App\Helpers\CacheHelper;
 
 class ArticleController extends Controller
 {
@@ -60,5 +61,28 @@ class ArticleController extends Controller
         // }
 
         return view('articles.show', compact('article', 'relatedPosts', 'sameAuthor', 'sameCategory', 'editorChoice'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $article = Article::findOrFail($id);
+        $article->update($request->all());
+
+        // Bersihkan semua cache terkait penulis dan artikel
+        CacheHelper::clearAuthorRelatedCache($article);
+
+        return redirect()->route('articles.show', $id)->with('success', 'Artikel berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        $article = Article::findOrFail($id);
+
+        // Bersihkan semua cache terkait penulis dan artikel
+        CacheHelper::clearAuthorRelatedCache($article);
+
+        $article->delete();
+
+        return redirect()->route('articles.index')->with('success', 'Artikel berhasil dihapus.');
     }
 }

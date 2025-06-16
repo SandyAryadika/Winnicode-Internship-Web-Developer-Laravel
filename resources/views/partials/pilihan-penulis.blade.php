@@ -8,7 +8,7 @@
             <a href="{{ route('articles.show', $item->id) }}"
                 class="group p-2 border rounded-md hover:shadow-lg transition flex flex-col">
                 <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
-                    alt="{{ $item->title }}" class="w-full h-48 object-cover mb-2 rounded-md" />
+                    loading="lazy" alt="{{ $item->title }}" class="w-full h-48 object-cover mb-2 rounded-md" />
 
                 <h4 class="font-semibold leading-snug line-clamp-2">
                     {{ Str::limit($item->title, 80) }}
@@ -23,11 +23,13 @@
 
                     <span class="flex gap-3">
                         <span class="flex items-center gap-1">
-                            <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views" class="w-4 h-4">
+                            <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy" alt="Views"
+                                class="w-4 h-4">
                             {{ number_format($item->views) }}
                         </span>
                         <span class="flex items-center gap-1">
-                            <img src="{{ asset('icons/commentdark.png') }}" alt="Comments" class="w-4 h-4">
+                            <img src="{{ asset('icons/commentdark.png') }}" loading="lazy" alt="Comments"
+                                class="w-4 h-4">
                             {{ $item->comments_count ?? 0 }}
                         </span>
                     </span>

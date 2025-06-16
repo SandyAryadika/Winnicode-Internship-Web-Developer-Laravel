@@ -16,5 +16,6 @@ Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('categ
 Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
 Route::get('/authors/{id}', [AuthorController::class, 'show'])->name('authors.show');
 Route::post('/subscribe', [SubscriberController::class, 'store'])->name('subscriber.store');
+Route::post('/unsubscribe', [SubscriberController::class, 'unsubscribe'])->name('subscriber.unsubscribe');
 Route::post('/articles/{article}/comments', [CommentController::class, 'store'])->name('comments.store');
 Route::get('/export-subscribers', [SubscriberExportController::class, 'export']);

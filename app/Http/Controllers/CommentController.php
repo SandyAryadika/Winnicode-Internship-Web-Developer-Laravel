@@ -17,6 +17,8 @@ class CommentController extends Controller
 
         $article->comments()->create($request->only('name', 'email', 'content'));
 
+        \App\Helpers\CacheHelper::clearCommentRelatedCache($article);
+
         return back()->with('success', 'Komentar berhasil ditambahkan.');
     }
 }

@@ -1,7 +1,7 @@
 <div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow duration-300 overflow-hidden">
     <a href="{{ route('articles.show', $related->id) }}" class="block">
         @if ($related->thumbnail)
-            <img src="{{ asset('storage/' . $related->thumbnail) }}" alt="{{ $related->title }}"
+            <img src="{{ asset('storage/' . $related->thumbnail) }}" alt="{{ $related->title }}" loading="lazy"
                 class="w-full h-40 object-cover">
         @endif
         <div class="p-4 space-y-2">
@@ -22,11 +22,11 @@
 
             <div class="flex gap-4 items-center text-sm text-gray-500 pt-2">
                 <span class="flex items-center gap-1">
-                    <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views" class="w-4 h-4">
+                    <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy" alt="Views" class="w-4 h-4">
                     {{ number_format($related->views) }}
                 </span>
                 <span class="flex items-center gap-1">
-                    <img src="{{ asset('icons/commentdark.png') }}" alt="Comments" class="w-4 h-4">
+                    <img src="{{ asset('icons/commentdark.png') }}" loading="lazy" alt="Comments" class="w-4 h-4">
                     {{ $related->comments_count ?? 0 }}
                 </span>
             </div>

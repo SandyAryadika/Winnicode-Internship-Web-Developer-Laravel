@@ -8,7 +8,7 @@
     <div id="hero-slider" class="flex transition-transform duration-500 w-full h-[400px]">
         @foreach ($beritaHangat->take(3) as $index => $article)
             <a href="{{ route('articles.show', $article->id) }}" class="block w-full shrink-0 relative group">
-                <img src="{{ asset('storage/' . $article->thumbnail) }}"
+                <img src="{{ asset('storage/' . $article->thumbnail) }}" loading="lazy"
                     class="w-full h-full object-cover brightness-75 group-hover:brightness-50 transition duration-500 ease-in-out"
                     alt="{{ $article->title }}" />
                 <div class="absolute inset-0 bg-black bg-opacity-25 group-hover:bg-opacity-50 transition duration-500">
@@ -26,12 +26,13 @@
                         </h1>
                         <div class="flex space-x-4 text-sm text-gray-200 mt-4 items-center">
                             <span class="flex items-center gap-1">
-                                <img src="{{ asset('icons/visibility.png') }}" alt="Views"
+                                <img src="{{ asset('icons/visibility.png') }}" loading="lazy" alt="Views"
                                     class="w-6 h-6 inline-block">
                                 {{ $article->views ?? '0' }}
                             </span>
                             <span class="flex items-center gap-1">
-                                <img src="{{ asset('icons/comment.png') }}" alt="Comments" class="w-6 h-6 inline-block">
+                                <img src="{{ asset('icons/comment.png') }}" loading="lazy" alt="Comments"
+                                    class="w-6 h-6 inline-block">
                                 {{ $article->comments_count ?? '0' }}
                             </span>
                         </div>
@@ -57,7 +58,7 @@
     @foreach ($beritaHangat->slice(3, 3) as $article)
         <a href="{{ route('articles.show', $article->id) }}"
             class="flex space-x-2 hover:bg-[#f3f4f6] hover:shadow-lg rounded-lg p-2 border transition duration-300 group">
-            <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="{{ $article->title }}"
+            <img src="{{ asset('storage/' . $article->thumbnail) }}" loading="lazy" alt="{{ $article->title }}"
                 class="w-24 h-24 object-cover rounded-md group-hover:scale-105 transition duration-300" />
             <div class="flex flex-col justify-between">
                 <h4 class="text-base font-semibold leading-snug line-clamp-3 group-hover:text-[#FF66C4] transition">
@@ -71,11 +72,13 @@
                     </div>
                     <div class="flex gap-4 items-center">
                         <span class="flex items-center gap-1">
-                            <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views" class="w-4 h-4">
+                            <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy" alt="Views"
+                                class="w-4 h-4">
                             {{ number_format($article->views) }}
                         </span>
                         <span class="flex items-center gap-1">
-                            <img src="{{ asset('icons/commentdark.png') }}" alt="Comments" class="w-4 h-4">
+                            <img src="{{ asset('icons/commentdark.png') }}" loading="lazy" alt="Comments"
+                                class="w-4 h-4">
                             {{ $article->comments_count ?? 0 }}
                         </span>
                     </div>

@@ -30,10 +30,10 @@
         <h4 class="font-bold mb-3 text-lg">Follow Us</h4>
         <div class="flex gap-4">
             <a href="https://winnicode.com/" target="_blank" class="hover:opacity-80 transition">
-                <img src="{{ asset('images/web.png') }}" alt="Website" class="w-6 h-6">
+                <img src="{{ asset('images/web.png') }}" loading="lazy" alt="Website" class="w-6 h-6">
             </a>
             <a href="https://www.instagram.com/winnicodeofficial/" target="_blank" class="hover:opacity-80 transition">
-                <img src="{{ asset('images/instagram.png') }}" alt="Instagram" class="w-6 h-6">
+                <img src="{{ asset('images/instagram.png') }}" loading="lazy" alt="Instagram" class="w-6 h-6">
             </a>
         </div>
     </div>

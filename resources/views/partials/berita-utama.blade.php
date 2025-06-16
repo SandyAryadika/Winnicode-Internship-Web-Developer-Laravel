@@ -7,7 +7,7 @@
             @if (isset($beritaUtama[0]))
                 <a href="{{ route('articles.show', $beritaUtama[0]->id) }}" class="group block">
                     <img src="{{ $beritaUtama[0]->thumbnail ? asset('storage/' . $beritaUtama[0]->thumbnail) : asset('images/default.jpg') }}"
-                        alt="{{ $beritaUtama[0]->title }}"
+                        loading="lazy" alt="{{ $beritaUtama[0]->title }}"
                         class="w-full h-56 object-cover rounded-md group-hover:scale-105 group-hover:brightness-90 transition duration-300">
                     <h3 class="mt-3 font-semibold text-lg group-hover:underline leading-snug">
                         {{ $beritaUtama[0]->title }}
@@ -19,11 +19,13 @@
                         </div>
                         <div class="flex items-center gap-4">
                             <span class="flex items-center gap-1">
-                                <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views" class="w-4 h-4">
+                                <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy" alt="Views"
+                                    class="w-4 h-4">
                                 {{ number_format($beritaUtama[0]->views) }}
                             </span>
                             <span class="flex items-center gap-1">
-                                <img src="{{ asset('icons/commentdark.png') }}" alt="Comments" class="w-4 h-4">
+                                <img src="{{ asset('icons/commentdark.png') }}" loading="lazy" alt="Comments"
+                                    class="w-4 h-4">
                                 {{ $beritaUtama[0]->comments_count ?? 0 }}
                             </span>
                         </div>
@@ -36,7 +38,7 @@
                     <a href="{{ route('articles.show', $item->id) }}"
                         class="flex items-start gap-3 group p-2 transition border rounded-md hover:shadow-lg">
                         <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
-                            alt="{{ $item->title }}"
+                            loading="lazy" alt="{{ $item->title }}"
                             class="w-24 h-24 object-cover rounded-md border group-hover:scale-105 transition duration-300">
 
                         <div class="flex flex-col justify-between h-full w-full">
@@ -53,12 +55,13 @@
 
                                 <div class="flex gap-3">
                                     <span class="flex items-center gap-1">
-                                        <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views"
-                                            class="w-4 h-4">
+                                        <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy"
+                                            alt="Views" class="w-4 h-4">
                                         {{ number_format($item->views) }}
                                     </span>
                                     <span class="flex items-center gap-1">
-                                        <img src="{{ asset('icons/commentdark.png') }}" alt="Comments" class="w-4 h-4">
+                                        <img src="{{ asset('icons/commentdark.png') }}" loading="lazy" alt="Comments"
+                                            class="w-4 h-4">
                                         {{ $item->comments_count ?? 0 }}
                                     </span>
                                 </div>
@@ -74,7 +77,7 @@
                 <a href="{{ route('articles.show', $beritaUtama[3]->id) }}"
                     class="flex flex-col lg:flex-row gap-4 group">
                     <img src="{{ $beritaUtama[3]->thumbnail ? asset('storage/' . $beritaUtama[3]->thumbnail) : asset('images/default.jpg') }}"
-                        alt="{{ $beritaUtama[3]->title }}"
+                        loading="lazy" alt="{{ $beritaUtama[3]->title }}"
                         class="w-full lg:w-1/2 h-80 object-cover rounded-md group-hover:brightness-90 transition duration-300">
                     <div class="w-full lg:w-1/2">
                         <h3 class="font-bold text-xl leading-snug group-hover:underline">
@@ -90,11 +93,13 @@
                             </div>
                             <div class="flex items-center gap-4">
                                 <span class="flex items-center gap-1">
-                                    <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views" class="w-4 h-4">
+                                    <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy" alt="Views"
+                                        class="w-4 h-4">
                                     {{ number_format($beritaUtama[3]->views) }}
                                 </span>
                                 <span class="flex items-center gap-1">
-                                    <img src="{{ asset('icons/commentdark.png') }}" alt="Comments" class="w-4 h-4">
+                                    <img src="{{ asset('icons/commentdark.png') }}" loading="lazy" alt="Comments"
+                                        class="w-4 h-4">
                                     {{ $beritaUtama[3]->comments_count ?? 0 }}
                                 </span>
                             </div>
@@ -108,7 +113,7 @@
                     <a href="{{ route('articles.show', $item->id) }}"
                         class="flex flex-col group p-2 border rounded-md hover:shadow-lg transition">
                         <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
-                            alt="{{ $item->title }}" class="w-full h-40 object-cover rounded-md">
+                            loading="lazy" alt="{{ $item->title }}" class="w-full h-40 object-cover rounded-md">
                         <h4 class="font-semibold mt-2 leading-snug">
                             {{ $item->title }}
                         </h4>
@@ -122,11 +127,13 @@
                             </div>
                             <div class="flex items-center gap-4">
                                 <span class="flex items-center gap-1">
-                                    <img src="{{ asset('icons/visibilitydark.png') }}" alt="Views" class="w-4 h-4">
+                                    <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy" alt="Views"
+                                        class="w-4 h-4">
                                     {{ number_format($item->views) }}
                                 </span>
                                 <span class="flex items-center gap-1">
-                                    <img src="{{ asset('icons/commentdark.png') }}" alt="Comments" class="w-4 h-4">
+                                    <img src="{{ asset('icons/commentdark.png') }}" loading="lazy" alt="Comments"
+                                        class="w-4 h-4">
                                     {{ $item->comments_count ?? 0 }}
                                 </span>
                             </div>

@@ -15,6 +15,10 @@
 
     <!-- CSS Global -->
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Noto Sans', sans-serif;
         }
@@ -61,23 +65,25 @@
     @yield('content')
 
     @php
-        $type = session('success') ? 'success' : (session('error') ? 'error' : (session('message') ? 'error' : null));
+        $success = session()->pull('success');
+        $error = session()->pull('error');
+        $message = session()->pull('message');
+
+        $toastMessage = $success ?? ($error ?? $message);
+        $type = $success ? 'success' : ($error || $message ? 'error' : null);
+
         $toastColors = [
             'success' => 'bg-green-500 text-white',
             'error' => 'bg-red-500 text-white',
         ];
-        $icon =
-            $type === 'success'
-                ? '<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />'
-                : '<path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />';
     @endphp
 
-    @if ($type)
-        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 10000)" x-show="show" x-transition.duration.300ms
+    @if ($toastMessage && $type)
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show" x-transition.duration.300ms
             class="fixed top-5 right-5 z-50 flex items-start w-full max-w-sm p-4 rounded-lg shadow-lg {{ $toastColors[$type] }}"
             role="alert">
             <span class="flex-1 text-sm font-medium">
-                {{ session('success') ?? (session('error') ?? session('message')) }}
+                {{ $toastMessage }}
             </span>
             <button @click="show = false" class="ml-4 text-white hover:text-gray-200 focus:outline-none">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -89,44 +95,40 @@
 
     <!-- JS Global -->
     <script>
-        // date-today
-        document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", function() {
+            // Date-Time
             const dateSpan = document.getElementById("date-today");
+            if (dateSpan) {
+                function updateDateTime() {
+                    const now = new Date();
+                    const datePart = now.toLocaleDateString('id-ID', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        timeZone: 'Asia/Jakarta'
+                    });
 
-            function updateDateTime() {
-                const now = new Date();
-                const options = {
-                    weekday: 'long',
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-                };
+                    const timePart = now.toLocaleTimeString('id-ID', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        hour12: true,
+                        timeZone: 'Asia/Jakarta'
+                    });
 
-                const datePart = now.toLocaleDateString('id-ID', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    timeZone: 'Asia/Jakarta'
-                });
+                    dateSpan.textContent = `${datePart}, ${timePart}`;
+                }
 
-                const timePart = now.toLocaleTimeString('id-ID', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: true,
-                    timeZone: 'Asia/Jakarta'
-                });
-
-                dateSpan.textContent = `${datePart}, ${timePart}`;
+                updateDateTime();
+                setInterval(updateDateTime, 1000);
             }
 
-            updateDateTime();
-            setInterval(updateDateTime, 1000);
-
+            // Category Scroll
             const scrollBox = document.getElementById("category-scroll");
-            if (scrollBox) {
+            if (scrollBox && !scrollBox.dataset.duplicated) {
                 scrollBox.innerHTML += scrollBox.innerHTML;
+                scrollBox.dataset.duplicated = "true";
 
                 let scrollAmount = 0;
                 const scrollSpeed = 1;
@@ -142,34 +144,34 @@
                     }
                 }, intervalSpeed);
             }
-        });
 
-        // hero-slider
-        let currentSlide = 0;
+            // Hero Slider
+            let currentSlide = 0;
 
-        function showSlide(index) {
-            const slider = document.getElementById("hero-slider");
-            const totalSlides = slider?.children.length || 0;
-            if (index >= 0 && index < totalSlides) {
-                slider.style.transform = `translateX(-${index * 100}%)`;
-                currentSlide = index;
+            function showSlide(index) {
+                const slider = document.getElementById("hero-slider");
+                const totalSlides = slider?.children.length || 0;
+                if (index >= 0 && index < totalSlides) {
+                    slider.style.transform = `translateX(-${index * 100}%)`;
+                    currentSlide = index;
+                }
             }
-        }
 
-        setInterval(() => {
-            currentSlide = (currentSlide + 1) % 3;
-            showSlide(currentSlide);
-        }, 7000);
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % 3;
+                showSlide(currentSlide);
+            }, 7000);
 
-        // related-cards
-        function scrollCarousel(id, direction) {
-            const container = document.getElementById(id);
-            const scrollAmount = 320;
-            container.scrollBy({
-                left: direction * scrollAmount,
-                behavior: 'smooth'
-            });
-        }
+            // Related Cards
+            window.scrollCarousel = function(id, direction) {
+                const container = document.getElementById(id);
+                const scrollAmount = 320;
+                container?.scrollBy({
+                    left: direction * scrollAmount,
+                    behavior: 'smooth'
+                });
+            }
+        });
     </script>
 
     @stack('scripts')

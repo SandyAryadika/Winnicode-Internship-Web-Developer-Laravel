@@ -7,33 +7,74 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use App\Notifications\NewSubscriberNotification;
 use Illuminate\Support\Facades\Notification;
+use App\Helpers\CacheHelper;
 
 class SubscriberController extends Controller
 {
     public function store(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|email'
         ]);
 
+        // Cegah subscribe jika sudah ada session aktif
+        if (session()->has('subscribed_email')) {
+            return redirect()->route('landing')->withErrors([
+                'email' => 'Anda sudah berlangganan dengan email: ' . session('subscribed_email') . '. Silakan unsubscribe terlebih dahulu.'
+            ]);
+        }
+
+        // Rate limiting berdasarkan IP
         $key = 'subscribe:' . $request->ip();
         if (RateLimiter::tooManyAttempts($key, 1)) {
-            return redirect()->back()->with('error', 'Tunggu sebentar sebelum mencoba lagi.');
+            return redirect()->route('landing')->withErrors([
+                'email' => 'Tunggu sebentar sebelum mencoba lagi.'
+            ]);
         }
 
-        RateLimiter::hit($key, 15);
+        RateLimiter::hit($key, 15); // Tunggu 15 detik untuk request berikutnya
 
+        // Cek jika email sudah ada di database
         if (Subscriber::where('email', $request->email)->exists()) {
-            return redirect()->back()->with('error', 'Email ini sudah terdaftar untuk newsletter.');
+            return redirect()->route('landing')->withErrors([
+                'email' => 'Email ini sudah terdaftar untuk newsletter.'
+            ]);
         }
 
+        // Simpan subscriber baru
         $subscriber = Subscriber::create([
-            'email' => $request->email,
+            'email' => $request->email
         ]);
 
-        $adminEmail = ['arizzhi@gmail.com', 'winnicode@gmail.com'];
-        Notification::route('mail', $adminEmail)->notify(new NewSubscriberNotification($subscriber));
+        // Bersihkan cache subscriber
+        CacheHelper::clearSubscriberCache();
 
-        return redirect()->back()->with('success', 'Terima kasih telah berlangganan!');
+        // Simpan status langganan di session
+        session()->put('subscribed_email', $request->email);
+
+        // Redirect kembali ke halaman utama dengan indikator sukses
+        return redirect()->route('landing')->with('success', 'Terima kasih telah berlangganan.');
+    }
+
+    public function unsubscribe(Request $request)
+    {
+        $email = session('subscribed_email');
+
+        if (!$email) {
+            return redirect()->route('landing')->withErrors([
+                'email' => 'Tidak ada langganan aktif untuk dibatalkan.'
+            ]);
+        }
+
+        // Hapus dari database (opsional, tergantung kebutuhan)
+        Subscriber::where('email', $email)->delete();
+
+        // Bersihkan cache subscriber
+        CacheHelper::clearSubscriberCache();
+
+        // Hapus session
+        session()->forget('subscribed_email');
+
+        return redirect()->route('landing')->with('success', 'Berhasil berhenti berlangganan.');
     }
 }
