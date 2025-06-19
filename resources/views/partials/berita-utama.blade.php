@@ -3,17 +3,17 @@
             class="text-[#FF66C4]">&gt;</span></h2>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        <div class="flex flex-col gap-8 h-full">
+        <div class="flex flex-col gap-5 h-full">
             @if (isset($beritaUtama[0]))
                 <a href="{{ route('articles.show', $beritaUtama[0]->id) }}" class="group block">
                     <img src="{{ $beritaUtama[0]->thumbnail ? asset('storage/' . $beritaUtama[0]->thumbnail) : asset('images/default.jpg') }}"
                         loading="lazy" alt="{{ $beritaUtama[0]->title }}"
                         class="w-full h-56 object-cover rounded-md group-hover:scale-105 group-hover:brightness-90 transition duration-300">
-                    <h3 class="mt-3 font-semibold text-lg group-hover:underline leading-snug">
+                    <h3 class="mt-3 font-semibold text-lg group-hover:underline leading-snug mb-4">
                         {{ $beritaUtama[0]->title }}
                     </h3>
                     <div class="text-xs text-gray-500 flex justify-between mt-1 items-center w-full">
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2 mb-2">
                             <span>{{ $beritaUtama[0]->category->name ?? '-' }}</span> |
                             <span>{{ \Carbon\Carbon::parse($beritaUtama[0]->published_at)->format('d/m/Y') }}</span>
                         </div>
@@ -33,7 +33,7 @@
                 </a>
             @endif
 
-            <div class="flex flex-col justify-between h-[14.5rem] gap-5">
+            <div class="flex flex-col justify-between h-[14.5rem] gap-4">
                 @foreach ($beritaUtama->slice(1, 2) as $item)
                     <a href="{{ route('articles.show', $item->id) }}"
                         class="flex items-start gap-3 group p-2 transition border rounded-md hover:shadow-lg">
@@ -117,9 +117,6 @@
                         <h4 class="font-semibold mt-2 leading-snug">
                             {{ $item->title }}
                         </h4>
-                        <p class="text-sm text-gray-600">
-                            {{ \Illuminate\Support\Str::limit(strip_tags($item->content), 40, '...') }}
-                        </p>
                         <div class="text-xs text-gray-500 flex justify-between mt-1 items-center w-full">
                             <div class="flex items-center gap-2">
                                 <span>{{ $item->category->name ?? '-' }}</span> |

@@ -4,21 +4,39 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use App\Models\Subscriber;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\NewArticleNotification;
 use App\Helpers\CacheHelper;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 
 class ArticleController extends Controller
 {
     public function show($id)
     {
-        $article = Article::with(['category', 'author'])
-            ->withCount('comments')
-            ->findOrFail($id);
+        // Ambil artikel lengkap dengan relasi kategori & penulis
+        $article = Article::with(['category', 'author'])->findOrFail($id);
 
-        $relatedPosts = Cache::remember("article_{$id}_related", now()->addMinutes(30), function () use ($article) {
+        // Tambahkan logika view counter berdasarkan IP + session
+        $ip = request()->ip();
+        $sessionId = Session::getId();
+        $key = "article_{$id}_viewed_by_{$ip}_{$sessionId}";
+
+        if (!Cache::has($key)) {
+            $article->increment('views');
+            Cache::put($key, true, now()->addMinutes(30));
+        }
+
+        // Komentar utama (tanpa parent), paginate dan eager load replies
+        $comments = $article->comments()
+            ->whereNull('parent_id')
+            ->with('replies')
+            ->latest()
+            ->paginate(5);
+
+        // Artikel terkait berdasarkan kategori
+        $relatedPosts = Cache::remember("article_{$id}_related", now()->addMinutes(10), function () use ($article) {
             return Article::where('id', '!=', $article->id)
                 ->where('category_id', $article->category_id)
                 ->latest()
@@ -26,8 +44,8 @@ class ArticleController extends Controller
                 ->get();
         });
 
-
-        $sameAuthor = Cache::remember("article_{$id}_same_author", now()->addMinutes(30), function () use ($article) {
+        // Artikel lain dari penulis yang sama
+        $sameAuthor = Cache::remember("article_{$id}_same_author", now()->addMinutes(10), function () use ($article) {
             return Article::where('author_id', $article->author_id)
                 ->where('id', '!=', $article->id)
                 ->where('status', 'published')
@@ -36,7 +54,8 @@ class ArticleController extends Controller
                 ->get();
         });
 
-        $sameCategory = Cache::remember("article_{$id}_same_category", now()->addMinutes(30), function () use ($article) {
+        // Artikel lain dari kategori yang sama
+        $sameCategory = Cache::remember("article_{$id}_same_category", now()->addMinutes(10), function () use ($article) {
             return Article::where('category_id', $article->category_id)
                 ->where('id', '!=', $article->id)
                 ->where('status', 'published')
@@ -45,7 +64,8 @@ class ArticleController extends Controller
                 ->get();
         });
 
-        $editorChoice = Cache::remember("article_{$id}_editor_choice", now()->addMinutes(30), function () use ($article) {
+        // Artikel pilihan editor
+        $editorChoice = Cache::remember("article_{$id}_editor_choice", now()->addMinutes(10), function () use ($article) {
             return Article::where('is_editor_choice', true)
                 ->where('id', '!=', $article->id)
                 ->where('status', 'published')
@@ -54,13 +74,14 @@ class ArticleController extends Controller
                 ->get();
         });
 
-        // $subscribers = Subscriber::all();
-        // foreach ($subscribers as $subscriber) {
-        //     Notification::route('mail', 'admin@example.com')
-        //         ->notify(new NewArticleNotification($article));
-        // }
-
-        return view('articles.show', compact('article', 'relatedPosts', 'sameAuthor', 'sameCategory', 'editorChoice'));
+        return view('articles.show', compact(
+            'article',
+            'relatedPosts',
+            'sameAuthor',
+            'sameCategory',
+            'editorChoice',
+            'comments'
+        ));
     }
 
     public function update(Request $request, $id)
@@ -68,7 +89,6 @@ class ArticleController extends Controller
         $article = Article::findOrFail($id);
         $article->update($request->all());
 
-        // Bersihkan semua cache terkait penulis dan artikel
         CacheHelper::clearAuthorRelatedCache($article);
 
         return redirect()->route('articles.show', $id)->with('success', 'Artikel berhasil diperbarui.');
@@ -78,7 +98,6 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
 
-        // Bersihkan semua cache terkait penulis dan artikel
         CacheHelper::clearAuthorRelatedCache($article);
 
         $article->delete();

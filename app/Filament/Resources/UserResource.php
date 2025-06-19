@@ -17,6 +17,9 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\Action;
 use Spatie\Permission\Models\Role;
+use App\Models\Author;
+use Filament\Resources\Pages\CreateRecord;
+use Filament\Resources\Pages\EditRecord;
 
 class UserResource extends Resource
 {
@@ -81,7 +84,11 @@ class UserResource extends Resource
                         'Writer' => 'primary',
                     ])
                     ->sortable(),
-
+                TextColumn::make('author.is_active')
+                    ->label('Status Penulis')
+                    ->badge()
+                    ->formatStateUsing(fn($state) => $state ? 'Aktif' : 'Nonaktif')
+                    ->color(fn($state) => $state ? 'success' : 'danger'),
                 TextColumn::make('created_at')
                     ->label('Tanggal Dibuat')
                     ->dateTime('d M Y')
@@ -136,5 +143,28 @@ class UserResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()->with('roles');
+    }
+
+    public static function createAuthor(User $user): void
+    {
+        if ($user->hasRole('writer') && !$user->author()->exists()) {
+            Author::create([
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'photo' => 'images/default.png',
+                'is_active' => false,
+            ]);
+        }
+    }
+
+    public static function afterCreate(Model $record): void
+    {
+        self::createAuthor($record);
+    }
+
+    public static function afterUpdate(Model $record): void
+    {
+        self::createAuthor($record); // tetap gunakan fungsi yang sama agar DRY
     }
 }

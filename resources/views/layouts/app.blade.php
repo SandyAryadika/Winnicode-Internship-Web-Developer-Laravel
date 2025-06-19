@@ -9,8 +9,8 @@
     <link rel="shortcut icon" href="{{ asset('images/circle-winnicode.ico') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Birthstone&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- CSS Global -->
@@ -95,8 +95,51 @@
 
     <!-- JS Global -->
     <script>
+        // --- GLOBAL FUNCTIONS ---
+        function scrollCarousel(containerId, direction) {
+            const container = document.getElementById(containerId);
+            if (!container) {
+                console.warn('Container not found:', containerId);
+                return;
+            }
+
+            const card = container.querySelector('.carousel-card');
+            const gap = 16; // gap-x-4 = 1rem
+            const scrollAmount = (card ? card.offsetWidth : 320) + gap;
+
+            container.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+
+        function confirmDelete(button) {
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: "Aksi ini tidak bisa dibatalkan.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e3342f',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    button.closest('form').submit();
+                }
+            });
+        }
+
+        function toggleReplyForm(id) {
+            const form = document.getElementById(`reply-form-${id}`);
+            if (form) {
+                form.classList.toggle('hidden');
+            }
+        }
+
+        // --- DOM READY LOGIC ---
         document.addEventListener("DOMContentLoaded", function() {
-            // Date-Time
+            // Date-Time Live Update
             const dateSpan = document.getElementById("date-today");
             if (dateSpan) {
                 function updateDateTime() {
@@ -124,7 +167,27 @@
                 setInterval(updateDateTime, 1000);
             }
 
-            // Category Scroll
+            // Hero Slider Logic
+            const slider = document.getElementById('hero-slider');
+            if (slider) {
+                let currentSlide = 0;
+                const slideCount = slider.children.length;
+
+                window.showSlide = function(index) {
+                    if (index >= 0 && index < slideCount) {
+                        currentSlide = index;
+                        const offset = -index * 100;
+                        slider.style.transform = `translateX(${offset}%)`;
+                    }
+                };
+
+                setInterval(() => {
+                    currentSlide = (currentSlide + 1) % slideCount;
+                    window.showSlide(currentSlide);
+                }, 5000);
+            }
+
+            // Marquee/Auto Scrolling Category
             const scrollBox = document.getElementById("category-scroll");
             if (scrollBox && !scrollBox.dataset.duplicated) {
                 scrollBox.innerHTML += scrollBox.innerHTML;
@@ -144,35 +207,9 @@
                     }
                 }, intervalSpeed);
             }
-
-            // Hero Slider
-            let currentSlide = 0;
-
-            function showSlide(index) {
-                const slider = document.getElementById("hero-slider");
-                const totalSlides = slider?.children.length || 0;
-                if (index >= 0 && index < totalSlides) {
-                    slider.style.transform = `translateX(-${index * 100}%)`;
-                    currentSlide = index;
-                }
-            }
-
-            setInterval(() => {
-                currentSlide = (currentSlide + 1) % 3;
-                showSlide(currentSlide);
-            }, 7000);
-
-            // Related Cards
-            window.scrollCarousel = function(id, direction) {
-                const container = document.getElementById(id);
-                const scrollAmount = 320;
-                container?.scrollBy({
-                    left: direction * scrollAmount,
-                    behavior: 'smooth'
-                });
-            }
         });
     </script>
+
 
     @stack('scripts')
 

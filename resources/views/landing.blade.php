@@ -12,8 +12,14 @@
     @include('partials.kontributor')
     @php
         $categoriesWithArticles = \App\Models\Category::has('articles')->get();
-        $kategoriAcak = $categoriesWithArticles->random();
-        $artikelKategori = \App\Models\Article::where('category_id', $kategoriAcak->id)->latest()->get();
+
+        if ($categoriesWithArticles->isNotEmpty()) {
+            $kategoriAcak = $categoriesWithArticles->random();
+            $artikelKategori = \App\Models\Article::where('category_id', $kategoriAcak->id)->latest()->get();
+        } else {
+            $kategoriAcak = null;
+            $artikelKategori = collect();
+        }
     @endphp
 
     @include('partials.lower-category', [

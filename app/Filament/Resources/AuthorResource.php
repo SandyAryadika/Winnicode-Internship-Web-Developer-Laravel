@@ -84,6 +84,7 @@ class AuthorResource extends Resource
                 TextColumn::make('bio')->label('Bio')->limit(20)->searchable()->tooltip(fn($record) => $record->bio),
                 ImageColumn::make('photo')
                     ->label('Foto')
+                    ->getStateUsing(fn($record) => $record->photo_url)
                     ->disk('public')
                     ->height('60px')
                     ->width('60px')

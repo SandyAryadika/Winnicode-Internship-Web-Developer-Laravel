@@ -37,8 +37,9 @@ class Article extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->whereNull('parent_id')->latest();
     }
+
 
     protected $casts = [
         'published_at' => 'datetime',

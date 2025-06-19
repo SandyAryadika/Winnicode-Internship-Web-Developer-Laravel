@@ -5,10 +5,10 @@
 
         <div class="lg:col-span-2">
             @php
-                $internasionalCategory = $categories->firstWhere('name', 'Internasional');
+                $kategoriAcak = $categories->isNotEmpty() ? $categories->random() : null;
             @endphp
 
-            @if ($internasionalCategory)
+            @if ($kategoriAcak)
                 <a href="{{ route('categories.show', $kategoriAcak->id) }}"
                     class="flex justify-between items-center mb-4 group">
                     <h2 class="text-5xl font-semibold font-birthstone tracking-wide text-black group-hover:underline">
@@ -110,20 +110,17 @@
                                 <span class="font-medium">{{ $berita->author->name ?? 'Tim Winnicode' }}</span>
                             </div>
                             <a href="{{ route('articles.show', $berita->id) }}"
-                                class="block text-black group-hover:underline">
+                                class="block text-black group-hover:underline mb-1">
                                 <p class="text-sm font-medium leading-snug">
                                     {{ \Illuminate\Support\Str::limit($berita->title, 75) }}
                                 </p>
                             </a>
 
-                            {{-- Bagian tanggal + views + komentar --}}
                             <div class="flex justify-between items-center mt-1 text-xs text-gray-500">
-                                {{-- Tanggal Publish --}}
                                 <span>
                                     {{ optional($berita->published_at)->translatedFormat('d/m/Y') ?? 'Belum dipublikasikan' }}
                                 </span>
 
-                                {{-- Views dan Komentar --}}
                                 <span class="flex items-center gap-3">
                                     <span class="flex items-center gap-1">
                                         <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy"
@@ -139,7 +136,6 @@
                             </div>
                         </div>
 
-                        {{-- Thumbnail --}}
                         <a href="{{ route('articles.show', $berita->id) }}">
                             <img src="{{ $berita->thumbnail ? asset('storage/' . $berita->thumbnail) : asset('images/default.jpg') }}"
                                 loading="lazy" class="rounded-md w-24 h-20 object-cover" alt="Thumb">

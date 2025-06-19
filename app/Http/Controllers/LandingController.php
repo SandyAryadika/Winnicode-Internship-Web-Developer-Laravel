@@ -51,7 +51,7 @@ class LandingController extends Controller
                 ->get();
         });
 
-        $topContributors = Cache::remember('landing_top_contributors', now()->addMinutes(30), function () {
+        $topContributors = Cache::remember('landing_top_contributors', now()->addMinutes(10), function () {
             return Author::withCount('articles')
                 ->orderByDesc('articles_count')
                 ->take(5)

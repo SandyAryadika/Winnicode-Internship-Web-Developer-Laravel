@@ -10,21 +10,38 @@ class Author extends Model
 
     public function articles()
     {
-        return $this->hasMany(Article::class, 'author_id', 'id')
-            ->whereNotNull('published_at')
-            ->orderByDesc('published_at');
+        return $this->hasMany(Article::class, 'author_id', 'id');
+        // ->whereNotNull('published_at')
+        // ->orderByDesc('published_at');
     }
+
+    public function publishedArticles()
+    {
+        return $this->hasMany(Article::class, 'author_id', 'id')
+            ->whereNotNull('published_at');
+    }
+
     public function getPhotoUrlAttribute()
     {
-        return $this->photo && file_exists(public_path('storage/' . $this->photo))
-            ? asset('storage/' . $this->photo)
-            : asset('images/default-avatar.png');
+        $storagePath = public_path('storage/' . $this->photo);
+        $publicPath = public_path($this->photo); // untuk images/default.png
+
+        if ($this->photo && file_exists($storagePath)) {
+            return asset('storage/' . $this->photo);
+        }
+
+        if ($this->photo && file_exists($publicPath)) {
+            return asset($this->photo);
+        }
+
+        return asset('images/default.png'); // fallback terakhir
     }
 
     public function getArticleCountAttribute()
     {
         return $this->articles()->count();
     }
+
     public function user()
     {
         return $this->belongsTo(User::class);

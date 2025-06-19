@@ -68,4 +68,23 @@ class User extends Authenticatable
     {
         return $this->hasMany(Article::class, 'author_id');
     }
+
+    protected static function booted(): void
+    {
+        static::saved(function (User $user) {
+            // Refresh roles relationship
+            $user->load('roles');
+
+            // Cek apakah user adalah writer dan belum punya author
+            if ($user->hasRole('writer') && !$user->author()->exists()) {
+                Author::create([
+                    'user_id'   => $user->id,
+                    'name'      => $user->name,
+                    'email'     => $user->email,
+                    'photo'     => 'images/default.png',
+                    'is_active' => false,
+                ]);
+            }
+        });
+    }
 }

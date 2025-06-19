@@ -3,19 +3,19 @@
     <h2 class="text-6xl font-semibold border-b border-t font-birthstone mb-6 pl-6 tracking-wide">Pilihan Penulis <span
             class="text-[#FF66C4]">&gt;</span></h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         @forelse ($editorChoiceArticles as $item)
             <a href="{{ route('articles.show', $item->id) }}"
                 class="group p-2 border rounded-md hover:shadow-lg transition flex flex-col">
                 <img src="{{ $item->thumbnail ? asset('storage/' . $item->thumbnail) : asset('images/default.jpg') }}"
                     loading="lazy" alt="{{ $item->title }}" class="w-full h-48 object-cover mb-2 rounded-md" />
 
-                <h4 class="font-semibold leading-snug line-clamp-2">
+                <h4 class="font-semibold leading-snug line-clamp-2 mb-2">
                     {{ Str::limit($item->title, 80) }}
                 </h4>
 
                 <!-- Meta info menempel di bawah -->
-                <div class="flex justify-between items-center text-sm text-gray-600 mt-auto">
+                <div class="flex justify-between items-center text-xs text-gray-400 mt-auto">
                     <span>
                         {{ $item->category->name ?? '-' }} |
                         {{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}

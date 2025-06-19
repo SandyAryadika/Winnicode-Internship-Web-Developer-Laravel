@@ -53,7 +53,7 @@
                         {{ Str::limit($item->title, 70) }}
                     </h4>
 
-                    <div class="flex justify-between items-center text-xs text-gray-500 mt-1">
+                    <div class="flex justify-between items-center text-xs text-gray-400 mt-1">
                         <span>
                             {{ $item->category->name ?? 'Tanpa Kategori' }} |
                             {{ $item->published_at->format('d/m/Y') }}

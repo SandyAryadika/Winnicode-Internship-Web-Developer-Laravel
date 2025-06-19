@@ -101,8 +101,8 @@ class ArticleResource extends Resource
 
             DatePicker::make('published_at')
                 ->label('Tanggal Publikasi')
-                ->required()
                 ->nullable()
+                ->required()
                 ->columnSpan('full'),
 
             Toggle::make('is_hot')

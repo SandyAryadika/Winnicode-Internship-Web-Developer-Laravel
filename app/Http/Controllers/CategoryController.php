@@ -14,11 +14,11 @@ class CategoryController extends Controller
     {
         $page = request()->get('page', 1);
 
-        $category = Cache::remember("category_{$id}_detail", now()->addMinutes(30), function () use ($id) {
+        $category = Cache::remember("category_{$id}_detail", now()->addMinutes(10), function () use ($id) {
             return Category::findOrFail($id);
         });
 
-        $articles = Cache::remember("category_{$id}_articles_page_{$page}", now()->addMinutes(30), function () use ($id) {
+        $articles = Cache::remember("category_{$id}_articles_page_{$page}", now()->addMinutes(10), function () use ($id) {
             return Article::with(['author', 'category'])
                 ->where('category_id', $id)
                 ->where('status', 'published')
@@ -28,7 +28,7 @@ class CategoryController extends Controller
                 ->paginate(12);
         });
 
-        $authors = Cache::remember("category_{$id}_top_authors", now()->addMinutes(30), function () {
+        $authors = Cache::remember("category_{$id}_top_authors", now()->addMinutes(10), function () {
             return Author::withCount([
                 'articles' => function ($q) {
                     $q->where('status', 'published')->whereNotNull('published_at');
@@ -40,7 +40,7 @@ class CategoryController extends Controller
                 ->get();
         });
 
-        $relatedCategories = Cache::remember("category_{$id}_related_categories", now()->addMinutes(30), function () use ($id) {
+        $relatedCategories = Cache::remember("category_{$id}_related_categories", now()->addMinutes(10), function () use ($id) {
             return \App\Models\Category::where('id', '!=', $id)
                 ->inRandomOrder()
                 ->limit(3)

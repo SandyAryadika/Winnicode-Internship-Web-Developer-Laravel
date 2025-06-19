@@ -15,18 +15,20 @@
                 <img src="{{ $article->author->photo ? asset('storage/' . $article->author->photo) : asset('images/default.jpg') }}"
                     loading="lazy" class="w-14 h-14 rounded-full object-cover" alt="{{ $article->author->name }}">
             </a>
-            <span>By <a href="{{ route('authors.show', $article->author) }}" class="text-blue-600 hover:underline">
+            <span>
+                By <a href="{{ route('authors.show', $article->author) }}" class="text-blue-600 hover:underline">
                     {{ $article->author->name }}
                 </a>
             </span>
             <span class="flex items-center gap-1">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M8 7V3m8 4V3m-9 9h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
-                    </path>
-                </svg>
+                <img src="{{ asset('icons/calendar.png') }}" alt="Published At" class="w-4 h-4" loading="lazy">
                 {{ $article->published_at->format('d M Y') }}
+            </span>
+            <span class="flex items-center gap-1">
+                <img src="{{ asset('icons/category.png') }}" alt="Category" class="w-4 h-4" loading="lazy">
+                <a href="{{ route('categories.show', $article->category) }}" class="hover:underline text-blue-600">
+                    {{ $article->category->name }}
+                </a>
             </span>
         </div>
         <div class="flex items-center gap-4 mt-2 sm:mt-0">
@@ -48,14 +50,25 @@
         </div>
     @endif
 
-    <section class="max-w-4xl mx-auto px-4 py-8">
+    <section class="max-w-6xl mx-auto px-4 py-8">
         <h1 class="text-4xl font-extrabold text-center mb-4 text-[#252525]">
             {{ $article->title }}
         </h1>
 
-        <article class="prose prose-lg max-w-none text-justify mb-12 ">
-            {!! modifyArticleContent($article->content) !!}
-        </article>
+        <div x-data="{ expanded: false }" class="relative">
+            <div x-ref="content" :style="expanded ? 'max-height: none' : 'max-height: 400px; overflow: hidden;'"
+                class="transition-all duration-500 ease-in-out">
+                <article class="prose prose-lg max-w-none text-justify text-[#252525]">
+                    {!! modifyArticleContent($article->content) !!}
+                </article>
+            </div>
+
+            <div class="mt-4 text-center">
+                <button @click="expanded = !expanded" class="text-blue-500 hover:underline font-medium">
+                    <span x-text="expanded ? 'Sembunyikan' : 'Tampilkan selengkapnya'"></span>
+                </button>
+            </div>
+        </div>
 
         @php
             $sections = [
@@ -77,7 +90,7 @@
                             class="flex overflow-x-auto space-x-4 scroll-smooth snap-x snap-mandatory px-1 pb-4 no-scrollbar">
                             @foreach ($section['data'] as $related)
                                 <div
-                                    class="min-w-[300px] max-w-xs snap-start shrink-0 transition-shadow duration-300 shadow-sm hover:shadow-xl rounded-lg bg-white">
+                                    class="min-w-[300px] max-w-xs snap-start shrink-0 transition-shadow duration-300 shadow-sm hover:shadow-xl rounded-lg bg-white carousel-card">
                                     @include('components.related-card', ['related' => $related])
                                 </div>
                             @endforeach
@@ -109,19 +122,114 @@
         <div class="mt-6 border-t pt-10">
             <h2 class="text-6xl font-semibold font-birthstone mb-4 text-[#252525]">Komentar ></h2>
 
-            @foreach ($article->comments as $comment)
-                <div class="mb-4 border-b pb-2">
-                    <p class="font-semibold text-[#252525]">{{ $comment->name }}</p>
-                    <p class="text-sm text-gray-600">{{ $comment->created_at->diffForHumans() }}</p>
-                    <p class="mt-2">{{ $comment->content }}</p>
+            {{-- Komentar utama --}}
+            @foreach ($comments as $comment)
+                <div class="mb-4 border-b pb-4 flex gap-4">
+                    <img src="{{ asset('images/default-comments.png') }}"
+                        class="w-10 h-10 rounded-full object-cover mt-1" />
+
+                    <div class="flex-1">
+                        <p class="font-extrabold text-lg text-[#252525]">{{ $comment->name }}</p>
+                        <p class="font-extralight text-sm text-gray-600">
+                            {{ $comment->created_at->diffForHumans() }} ·
+                            {{ $comment->created_at->format('d F Y') }} ·
+                            {{ $comment->created_at->format('H:i') }} WIB
+                        </p>
+                        <p class="font-normal mt-2 text-[#252525]">{{ $comment->content }}</p>
+
+                        {{-- Tombol Balas --}}
+                        <button
+                            onclick="document.getElementById('reply-form-{{ $comment->id }}').classList.toggle('hidden')"
+                            class="inline-flex items-center text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded-full mt-2 hover:bg-blue-200 transition">
+                            Balas
+                        </button>
+
+                        @php
+                            $sessionEmail = session('comment_email');
+                        @endphp
+
+                        @if ($comment->email && $comment->email === $sessionEmail)
+                            <form action="{{ route('comments.destroy', $comment->id) }}" method="POST"
+                                class="inline mt-2">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="inline-flex items-center text-sm bg-red-100 text-red-600 px-3 py-1 rounded-full mt-2 hover:bg-red-200 transition">
+                                    Hapus
+                                </button>
+                            </form>
+                        @endif
+
+                        {{-- Form balasan --}}
+                        <form method="POST" action="{{ route('comments.store', $article->id) }}"
+                            id="reply-form-{{ $comment->id }}" class="mt-2 hidden">
+                            @csrf
+                            <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                            <input type="text" name="name" placeholder="Nama Anda" required
+                                class="w-full font-normal border px-2 py-1 rounded mt-2">
+                            <input type="email" name="email" placeholder="Email Anda (opsional)"
+                                class="w-full font-normal border px-2 py-1 rounded mt-2">
+                            <small class="px-2 mt-2 font-light text-red-500 text-sm">Isi email jika ingin bisa menghapus
+                                komentar ini
+                                nanti.</small>
+
+                            <textarea name="content" placeholder="Tulis balasan..." required
+                                class="w-full font-normal border px-2 py-1 rounded mt-2"></textarea>
+                            <button type="submit" class="text-sm text-white bg-blue-400 px-3 py-1 rounded mt-2">Kirim
+                                Balasan</button>
+                        </form>
+
+                        {{-- Balasan --}}
+                        @foreach ($comment->replies as $reply)
+                            <div class="ml-10 mt-4 border-l pl-4 flex gap-4">
+                                <img src="{{ asset('images/default-comments.png') }}" alt="Avatar"
+                                    class="w-8 h-8 rounded-full object-cover mt-1" />
+                                <div>
+                                    <p class="font-semibold text-[#252525]">{{ $reply->name }}</p>
+                                    <p class="font-extralight text-sm text-gray-600">
+                                        {{ $reply->created_at->diffForHumans() }} ·
+                                        {{ $reply->created_at->format('d F Y') }} ·
+                                        {{ $reply->created_at->format('H:i') }} WIB
+                                    </p>
+                                    <p class="font-normal text-sm mt-1">{{ $reply->content }}</p>
+
+                                    @php
+                                        $sessionEmail = session('comment_email');
+                                    @endphp
+
+                                    @if ($reply->email && $reply->email === $sessionEmail)
+                                        <form action="{{ route('comments.destroy', $reply->id) }}" method="POST"
+                                            class="inline mt-2">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="inline-flex items-center text-sm bg-red-100 text-red-600 px-3 py-1 rounded-full mt-2 hover:bg-red-200 transition">
+                                                Hapus
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             @endforeach
 
+            {{-- PAGINATION untuk komentar utama --}}
+            <div class="mt-6">
+                {{ $comments->links() }}
+            </div>
+
+            {{-- FORM KOMENTAR BARU --}}
             <form method="POST" action="{{ route('comments.store', $article->id) }}" class="mt-6 space-y-4">
                 @csrf
                 <input type="text" name="name" placeholder="Nama Anda" required
                     class="w-full border px-4 py-2 rounded">
-                <input type="email" name="email" placeholder="Email (opsional)" class="w-full border px-4 py-2 rounded">
+                <input type="email" name="email" placeholder="Email (opsional)"
+                    class="w-full border px-4 py-2 rounded">
+                <small class="px-2 mt-2 font-light text-red-500 text-sm">Isi email jika ingin bisa menghapus
+                    komentar ini
+                    nanti.</small>
                 <textarea name="content" placeholder="Tulis komentar..." required class="w-full border px-4 py-2 rounded"></textarea>
                 <button type="submit"
                     class="bg-blue-400 text-white px-6 py-2 rounded border border-gray-300 shadow-md hover:shadow-lg transition">
