@@ -1,6 +1,7 @@
 <section class="py-6 px-6">
-    <h2 class="text-6xl font-semibold border-b border-t font-birthstone mb-6 pl-6 tracking-wide">Sorotan Pilihan <span
-            class="text-[#FF66C4]">&gt;</span></h2>
+    <h2 class="text-6xl font-semibold border-b border-t font-birthstone mb-6 pl-6 tracking-wide">
+        Sorotan Pilihan <span class="text-[#FF66C4]">&gt;</span>
+    </h2>
 
     @if ($artikelSorotan->isNotEmpty())
         @php $utama = $artikelSorotan->first(); @endphp
@@ -76,6 +77,8 @@
             @endforeach
         </div>
     @else
-        <p class="text-gray-500 italic">Belum ada artikel sorotan pilihan.</p>
+        <div class="py-12 text-center">
+            <p class="text-lg text-gray-500">Tidak ada artikel di section <strong>Sorotan Pilihan</strong>.</p>
+        </div>
     @endif
 </section>

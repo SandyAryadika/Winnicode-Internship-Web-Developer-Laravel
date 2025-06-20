@@ -13,46 +13,43 @@ class SubscriberController extends Controller
 {
     public function store(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email'
-        ]);
-
-        // Cegah subscribe jika sudah ada session aktif
-        if (session()->has('subscribed_email')) {
-            return redirect()->route('landing')->withErrors([
-                'email' => 'Anda sudah berlangganan dengan email: ' . session('subscribed_email') . '. Silakan unsubscribe terlebih dahulu.'
+        try {
+            $request->validate([
+                'email' => [
+                    'required',
+                    'email',
+                    'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i',
+                    'unique:subscribers,email',
+                ],
+            ], [
+                'email.email' => 'Format email tidak valid.',
+                'email.regex' => 'Hanya alamat @gmail.com yang diperbolehkan.',
+                'email.unique' => 'Email sudah terdaftar.',
             ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->route('landing')->with('error', $e->validator->errors()->first('email'));
         }
 
-        // Rate limiting berdasarkan IP
+        if (session()->has('subscribed_email')) {
+            return redirect()->route('landing')->with('error', 'Anda sudah berlangganan dengan email: ' . session('subscribed_email') . '. Silakan unsubscribe terlebih dahulu.');
+        }
+
         $key = 'subscribe:' . $request->ip();
         if (RateLimiter::tooManyAttempts($key, 1)) {
-            return redirect()->route('landing')->withErrors([
-                'email' => 'Tunggu sebentar sebelum mencoba lagi.'
-            ]);
+            return redirect()->route('landing')->with('error', 'Tunggu sebentar sebelum mencoba lagi.');
         }
 
-        RateLimiter::hit($key, 15); // Tunggu 15 detik untuk request berikutnya
+        RateLimiter::hit($key, 15);
 
-        // Cek jika email sudah ada di database
         if (Subscriber::where('email', $request->email)->exists()) {
-            return redirect()->route('landing')->withErrors([
-                'email' => 'Email ini sudah terdaftar untuk newsletter.'
-            ]);
+            return redirect()->route('landing')->with('error', 'Email ini sudah terdaftar untuk newsletter.');
         }
 
-        // Simpan subscriber baru
-        $subscriber = Subscriber::create([
-            'email' => $request->email
-        ]);
+        Subscriber::create(['email' => $request->email]);
 
-        // Bersihkan cache subscriber
         CacheHelper::clearSubscriberCache();
-
-        // Simpan status langganan di session
         session()->put('subscribed_email', $request->email);
 
-        // Redirect kembali ke halaman utama dengan indikator sukses
         return redirect()->route('landing')->with('success', 'Terima kasih telah berlangganan.');
     }
 
@@ -61,18 +58,11 @@ class SubscriberController extends Controller
         $email = session('subscribed_email');
 
         if (!$email) {
-            return redirect()->route('landing')->withErrors([
-                'email' => 'Tidak ada langganan aktif untuk dibatalkan.'
-            ]);
+            return redirect()->route('landing')->with('error', 'Tidak ada langganan aktif untuk dibatalkan.');
         }
 
-        // Hapus dari database (opsional, tergantung kebutuhan)
         Subscriber::where('email', $email)->delete();
-
-        // Bersihkan cache subscriber
         CacheHelper::clearSubscriberCache();
-
-        // Hapus session
         session()->forget('subscribed_email');
 
         return redirect()->route('landing')->with('success', 'Berhasil berhenti berlangganan.');

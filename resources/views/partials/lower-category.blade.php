@@ -102,47 +102,54 @@
                 <span class="text-blue-600 text-sm cursor-pointer"></span>
             </div>
 
-            <div class="space-y-6">
-                @foreach ($rekomendasi as $berita)
-                    <div class="flex gap-4 group">
-                        <div class="flex-1">
-                            <div class="text-sm text-gray-500 mb-1">
-                                <span class="font-medium">{{ $berita->author->name ?? 'Tim Winnicode' }}</span>
+            @if ($rekomendasi->isNotEmpty())
+                <div class="space-y-6">
+                    @foreach ($rekomendasi as $berita)
+                        <div class="flex gap-4 group">
+                            <div class="flex-1">
+                                <div class="text-sm text-gray-500 mb-1">
+                                    <span class="font-medium">{{ $berita->author->name ?? 'Tim Winnicode' }}</span>
+                                </div>
+                                <a href="{{ route('articles.show', $berita->id) }}"
+                                    class="block text-black group-hover:underline mb-1">
+                                    <p class="text-sm font-medium leading-snug">
+                                        {{ \Illuminate\Support\Str::limit($berita->title, 75) }}
+                                    </p>
+                                </a>
+
+                                <div class="flex justify-between items-center mt-1 text-xs text-gray-500">
+                                    <span>
+                                        {{ optional($berita->published_at)->translatedFormat('d/m/Y') ?? 'Belum dipublikasikan' }}
+                                    </span>
+
+                                    <span class="flex items-center gap-3">
+                                        <span class="flex items-center gap-1">
+                                            <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy"
+                                                alt="views" class="w-4 h-4">
+                                            {{ number_format($berita->views) }}
+                                        </span>
+                                        <span class="flex items-center gap-1">
+                                            <img src="{{ asset('icons/commentdark.png') }}" loading="lazy"
+                                                alt="comments" class="w-4 h-4">
+                                            {{ $berita->comments_count ?? 0 }}
+                                        </span>
+                                    </span>
+                                </div>
                             </div>
-                            <a href="{{ route('articles.show', $berita->id) }}"
-                                class="block text-black group-hover:underline mb-1">
-                                <p class="text-sm font-medium leading-snug">
-                                    {{ \Illuminate\Support\Str::limit($berita->title, 75) }}
-                                </p>
+
+                            <a href="{{ route('articles.show', $berita->id) }}">
+                                <img src="{{ $berita->thumbnail ? asset('storage/' . $berita->thumbnail) : asset('images/default.jpg') }}"
+                                    loading="lazy" class="rounded-md w-24 h-20 object-cover" alt="Thumb">
                             </a>
-
-                            <div class="flex justify-between items-center mt-1 text-xs text-gray-500">
-                                <span>
-                                    {{ optional($berita->published_at)->translatedFormat('d/m/Y') ?? 'Belum dipublikasikan' }}
-                                </span>
-
-                                <span class="flex items-center gap-3">
-                                    <span class="flex items-center gap-1">
-                                        <img src="{{ asset('icons/visibilitydark.png') }}" loading="lazy"
-                                            alt="views" class="w-4 h-4">
-                                        {{ number_format($berita->views) }}
-                                    </span>
-                                    <span class="flex items-center gap-1">
-                                        <img src="{{ asset('icons/commentdark.png') }}" loading="lazy" alt="comments"
-                                            class="w-4 h-4">
-                                        {{ $berita->comments_count ?? 0 }}
-                                    </span>
-                                </span>
-                            </div>
                         </div>
-
-                        <a href="{{ route('articles.show', $berita->id) }}">
-                            <img src="{{ $berita->thumbnail ? asset('storage/' . $berita->thumbnail) : asset('images/default.jpg') }}"
-                                loading="lazy" class="rounded-md w-24 h-20 object-cover" alt="Thumb">
-                        </a>
-                    </div>
-                @endforeach
-            </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="text-center py-6">
+                    <p class="text-gray-500 text-sm italic">Tidak ada Artikel di section <strong>Rekomendasi</strong>.
+                    </p>
+                </div>
+            @endif
         </div>
     </div>
 </div>
