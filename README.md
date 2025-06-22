@@ -140,4 +140,9 @@ Pastikan server lokal Anda memenuhi persyaratan berikut:
     * **Email**: winnicode@gmail.com  
     * **Password**: 12345678
 
-> (Silakan sesuaikan email dan password jika isi database `winnicode.sql` berbeda.)
+Jika database Anda belum memiliki akun pengguna admin/editor, Anda dapat membuatnya secara manual melalui terminal dengan perintah berikut:
+
+```bash
+php artisan make:filament-user-role "Nama Lengkap" email@example.com password role
+```
+> Gantilah role dengan salah satu peran yang tersedia di aplikasi, seperti: admin atau editor.
